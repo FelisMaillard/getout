@@ -50,6 +50,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'prenom' => 'Elouan',
+            'tag' => 'elouan_getout',
             'nom' => 'Tusseau',
             'email' => 'tusseauelouan@gmail.com',
             'password' => Hash::make('#20Admin@Elouan25$'),
@@ -63,6 +64,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'prenom' => 'Félis',
+            'tag' => 'felis_getout',
             'nom' => 'Maillard',
             'email' => 'felis.maillard@gmail.com',
             'password' => Hash::make('*02FelisAdmin2025$'),
@@ -76,6 +78,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'prenom' => 'Admin',
+            'tag' => 'admin_getout',
             'nom' => 'Admin',
             'email' => 'admin@getout.fr',
             'password' => Hash::make('*02FeNalAdmin#Getout@2025$'),
