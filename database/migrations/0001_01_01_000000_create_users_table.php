@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('prenom');
             $table->string('nom');
+            $table->string('tag', 30)->unique();
+            $table->string('profile_photo_url')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('searchable')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

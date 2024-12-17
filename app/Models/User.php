@@ -16,6 +16,8 @@ class User extends Authenticatable
         'tag',
         'email',
         'password',
+        'profile_photo_url',
+        'searchable',
     ];
 
     protected $hidden = [
@@ -26,6 +28,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'searchable' => 'boolean',
     ];
 
     // Mutator pour s'assurer que le tag est toujours en minuscules
