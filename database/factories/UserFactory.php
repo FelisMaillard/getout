@@ -42,4 +42,43 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Configure the model factory for Elouan admin.
+     */
+    public function elouanAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'prenom' => 'Elouan',
+            'nom' => 'Tusseau',
+            'email' => 'tusseauelouan@gmail.com',
+            'password' => Hash::make('#20Admin@Elouan25$'),
+        ]);
+    }
+
+    /**
+     * Configure the model factory for Felis admin.
+     */
+    public function felisAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'prenom' => 'Félis',
+            'nom' => 'Maillard',
+            'email' => 'felis.maillard@gmail.com',
+            'password' => Hash::make('*02FelisAdmin2025$'),
+        ]);
+    }
+
+    /**
+     * Configure the model factory for main admin.
+     */
+    public function mainAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'prenom' => 'Admin',
+            'nom' => 'Admin',
+            'email' => 'admin@getout.fr',
+            'password' => Hash::make('*02FeNalAdmin#Getout@2025$'),
+        ]);
+    }
 }
