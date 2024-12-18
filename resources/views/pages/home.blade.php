@@ -65,10 +65,5 @@
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-purple-900/90 backdrop-blur-sm p-4 text-center">
-        <p class="text-sm text-white">
-            Bienvenue sur GetOut - Connectez-vous et partagez vos moments préférés avec vos amis. <a href="/privacy" class="underline hover:text-purple-200">En savoir plus</a>
-        </p>
-    </div>
 </div>
 @endsection

@@ -15,10 +15,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 </head>
-<body class="bg-gray-950 text-white antialiased h-full">
-    <div class="min-h-screen flex">
+<body class="bg-gray-950 text-white antialiased md:h-full">
+    <div class="mt-36 md:mt-0 md:min-h-screen flex">
         <!-- Login Container -->
-        <main class="flex-1 flex items-center justify-center p-4">
+        <main class="flex-1 flex items-center justify-center">
             <div class="w-full max-w-md">
                 <!-- Logo -->
                 <div class="mb-8 text-center">
