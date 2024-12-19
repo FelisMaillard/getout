@@ -1,0 +1,88 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="min-h-screen bg-gray-950 py-24 md:py-10">
+    <div class="max-w-md md:max-w-2xl mx-auto px-4">
+
+        <!-- Carte de profil -->
+        <div class="bg-black rounded-lg p-6 border border-gray-800">
+
+            <!-- Photo de profil -->
+            <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">
+                <div class="w-32 h-32 md:w-72 md:h-72 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
+                    {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+                </div>
+            </div>
+
+            <!-- Ligne séparatrice -->
+            <div class="md:hidden flex justify-center items-center h-10">
+                <div class="w-full max-w-md h-[1px] bg-gray-800 mb-6"></div>
+            </div>
+
+            <div class="flex gap-2 md:gap-6">
+                <!-- Photo de profil -->
+                <div class="hidden md:flex md:w-32 md:h-32 rounded-full overflow-hidden bg-purple-600 items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
+                    {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+                </div>
+
+                <!-- Informations -->
+                <div class="flex-1 space-y-4">
+                    <!-- Nom et actions -->
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h1 class="text-xl font-medium text-white">{{ '@' . $user->tag }}</h1>
+                            <div class="text-white font-medium">{{ $user->prenom }} {{ $user->nom }}</div>
+                        </div>
+
+                        @if(!$isOwnProfile)
+                            <div class="flex gap-1 md:gap-2">
+                                <form action="{{ route('relations.send', $user->tag) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                            class="px-2 py-2 md:px-4 md:py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition">
+                                        @if($isFollowing)
+                                            Ne plus suivre
+                                        @elseif($hasPendingRequest)
+                                            Demande envoyée
+                                        @else
+                                            Suivre
+                                        @endif
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('relations.block', $user->tag) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                            class="px-2 py-2 md:px-4 md:py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg transition">
+                                        Bloquer
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Bio -->
+                    @if($user->bio)
+                        <div class="text-gray-300">
+                            {{ $user->bio }}
+                        </div>
+                    @endif
+
+                    <!-- Stats -->
+                    <div class="flex gap-6">
+                        <div class="text-center">
+                            <span class="block text-white font-bold">{{ $user->followersCount() }}</span>
+                            <span class="text-gray-400 text-sm">abonnés</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="block text-white font-bold">{{ $user->followingCount() }}</span>
+                            <span class="text-gray-400 text-sm">abonnements</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection

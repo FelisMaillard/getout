@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -56,5 +57,33 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show(Request $request, $tag)
+    {
+        // Récupérer l'utilisateur par son tag
+        $user = User::where('tag', $tag)->firstOrFail();
+
+        // Vérifier si c'est le profil de l'utilisateur connecté
+        $isOwnProfile = Auth::id() === $user->id;
+
+        // Vérifier si l'utilisateur courant suit déjà cet utilisateur
+        $isFollowing = !$isOwnProfile && Auth::user()->sentRelations()
+            ->where('friend_id', $user->id)
+            ->where('status', 'accepted')
+            ->exists();
+
+        // Vérifier s'il y a une demande en attente
+        $hasPendingRequest = !$isOwnProfile && Auth::user()->sentRelations()
+            ->where('friend_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        return view('profile.show', [
+            'user' => $user,
+            'isOwnProfile' => $isOwnProfile,
+            'isFollowing' => $isFollowing,
+            'hasPendingRequest' => $hasPendingRequest,
+        ]);
     }
 }

@@ -52,6 +52,7 @@ class UserFactory extends Factory
             'prenom' => 'Elouan',
             'tag' => 'elouan_getout',
             'nom' => 'Tusseau',
+            'bio' => 'Administrateur de Getout',
             'email' => 'tusseauelouan@gmail.com',
             'password' => Hash::make('#20Admin@Elouan25$'),
         ]);
@@ -66,6 +67,7 @@ class UserFactory extends Factory
             'prenom' => 'Félis',
             'tag' => 'felis_getout',
             'nom' => 'Maillard',
+            'bio' => 'Administrateur de Getout',
             'email' => 'felis.maillard@gmail.com',
             'password' => Hash::make('*02FelisAdmin2025$'),
         ]);
@@ -80,6 +82,7 @@ class UserFactory extends Factory
             'prenom' => 'Admin',
             'tag' => 'admin_getout',
             'nom' => 'Admin',
+            'bio' => 'Administrateur principal de Getout',
             'email' => 'admin@getout.fr',
             'password' => Hash::make('*02FeNalAdmin#Getout@2025$'),
         ]);

@@ -6,6 +6,7 @@
             class="w-full px-6 py-4 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-lg"
             placeholder="Rechercher un utilisateur..."
             autocomplete="off"
+            value="{{ old('query', session('query', '')) }}"
         >
         <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,10 +16,11 @@
     </div>
 
     <div class="mt-6 space-y-4">
-            @if($users->isEmpty())
-                <p class="text-gray-400 text-center">Aucun résultat trouvé</p>
-            @else
-                @foreach($users as $user)
+        @if($users->isEmpty())
+            <p class="text-gray-400 text-center">Aucun résultat trouvé</p>
+        @else
+            @foreach($users as $user)
+                <a href="{{ "@" . $user->tag }}">
                     <div class="bg-black border border-gray-800 rounded-lg p-4 flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -29,11 +31,21 @@
                                 <p class="text-gray-400">{{ "@" . $user->tag }}</p>
                             </div>
                         </div>
-                        <a href="#" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
-                            Voir le profil
-                        </a>
+                        @php
+                            $existingRelation = Auth::user()->sentRelations()->where('friend_id', $user->id)->first();
+                        @endphp
+                        @if($existingRelation && $existingRelation->status === 'pending')
+                            <button disabled>Envoyé</button>
+                        @else
+                            <form action="{{ route('relations.send', ['userTag' => $user->tag]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="query" value="{{ session('query', '') }}">
+                                <button type="submit">+ Ajouter</button>
+                            </form>
+                        @endif
                     </div>
-                @endforeach
-            @endif
+                </a>
+            @endforeach
+        @endif
     </div>
 </div>

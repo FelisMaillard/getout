@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\SearchController;
+use App\Http\Controllers\Pages\UserRelationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Search routes
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
+    // Routes pour les amitiés
+    Route::post('/relations/{userTag}', [UserRelationController::class, 'sendRequest'])->name('relations.send');
+    Route::post('/relations/{relation}/accept', [UserRelationController::class, 'acceptRequest'])->name('relations.accept');
+    Route::post('/relations/{user}/block', [UserRelationController::class, 'blockUser'])->name('relations.block');
+    Route::delete('/relations/{relation}', [UserRelationController::class, 'removeRelation'])->name('relations.remove');
+
     // Profile routes
+    Route::get('/@{tag}', [ProfileController::class, 'show'])->name('profile.show');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
