@@ -153,11 +153,16 @@
 
                         <!-- Notifications -->
                         <li>
-                            <a href="#" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
-                                <div class="w-6 flex justify-center">
+                            <a href="{{ route('notifications.index') }}" class="group relative flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
+                                <div class="relative">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                                     </svg>
+                                    @if($pendingRequestsCount > 0)
+                                        <span class="absolute -top-0 -right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600 text-red-100">
+                                            {{ $pendingRequestsCount }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Notifications</span>
                             </a>
@@ -168,7 +173,7 @@
                 <!-- Bottom Section -->
                 <div class="px-2 pb-4 space-y-2">
                     <!-- Profile -->
-                    <a href="#" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
+                    <a href="{{ "@" . $user->tag }}" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
                         <div class="w-6 flex justify-center">
                             @if(Auth::user()->profile_photo_url)
                                 <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="w-6 h-6 rounded-full">
@@ -236,13 +241,21 @@
                     </svg>
                 </a>
 
-                <a href="#" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                    </svg>
+                <a href="{{ route('notifications.index') }}" class="relative flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
+                    <div class="w-6 flex justify-center relative">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        @if($pendingRequestsCount > 0)
+                            <div class="absolute -top-2 -right-3 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
+                                <span class="text-xs font-bold text-white">{{ $pendingRequestsCount }}</span>
+                            </div>
+                        @endif
+                    </div>
+                    <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Notifications</span>
                 </a>
 
-                <button class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
+                <a href="{{ "@" . $user->tag }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
                     @if(Auth::user()->profile_photo_url)
                         <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="w-6 h-6 rounded-full">
                     @else
@@ -250,7 +263,7 @@
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </div>
                     @endif
-                </button>
+                </a>
             </div>
         </nav>
 

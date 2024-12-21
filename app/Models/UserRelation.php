@@ -29,10 +29,4 @@ class UserRelation extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    // Relation avec l'utilisateur qui reçoit la demande
-    public function friend()
-    {
-        return $this->belongsTo(User::class, 'friend_id');
-    }
 }

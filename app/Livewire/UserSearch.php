@@ -14,8 +14,7 @@ class UserSearch extends Component
         $users = collect();
 
         if (strlen($this->query) >= 1) {
-            $users = User::where('searchable', true)
-                ->where(function($q) {
+            $users = User::where(function($q) {
                     $q->where('tag', 'LIKE', "%{$this->query}%")
                       ->orWhere('nom', 'LIKE', "%{$this->query}%")
                       ->orWhere('prenom', 'LIKE', "%{$this->query}%");

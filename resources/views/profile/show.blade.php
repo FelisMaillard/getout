@@ -34,8 +34,8 @@
                             <div class="text-white font-medium">{{ $user->prenom }} {{ $user->nom }}</div>
                         </div>
 
-                        @if(!$isOwnProfile)
-                            <div class="flex gap-1 md:gap-2">
+                        <div class="flex gap-1 md:gap-2">
+                            @if(!$isOwnProfile)
                                 <form action="{{ route('relations.send', $user->tag) }}" method="POST">
                                     @csrf
                                     <button type="submit"
@@ -57,8 +57,19 @@
                                         Bloquer
                                     </button>
                                 </form>
-                            </div>
-                        @endif
+                            @else
+                                <a href="{{ route('profile.edit') }}"
+                                   class="px-2 py-2 md:px-4 md:py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg transition">
+                                    Modifier
+                                </a>
+                                <a href="{{ route('notifications.index') }}"
+                                    class="px-2 py-2 md:px-4 md:py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg transition">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                          <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zm-2 14a2 2 0 104 0H8z" clip-rule="evenodd" />
+                                     </svg>
+                                </a>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Bio -->

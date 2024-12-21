@@ -40,28 +40,31 @@ class UserRelationController extends Controller
         return redirect()->back()->with('status', 'Une demande est déjà en cours');
     }
 
-    public function acceptRequest(UserRelation $relation, Request $request)
+    /**
+     * Accepte une demande d'abonnement
+     *
+     * @param UserRelation $relation La relation à accepter
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function acceptRequest(UserRelation $relation)
     {
         // Vérifier que l'utilisateur connecté est bien le destinataire
         if ($relation->friend_id !== Auth::id()) {
-            return response()->json(['message' => 'Non autorisé'], 403);
+            return back()->with('error', 'Vous n\'êtes pas autorisé à effectuer cette action.');
         }
 
-        // Valider le consentement RGPD
-        $request->validate([
-            'privacy_consent' => 'required|boolean'
-        ]);
+        try {
+            // Mettre à jour le statut de la relation
+            $relation->update([
+                'status' => 'accepted',
+                'privacy_consent' => true, // L'utilisateur accepte le partage de données
+                'privacy_consent_date' => now() // Date du consentement RGPD
+            ]);
 
-        $relation->update([
-            'status' => 'accepted',
-            'privacy_consent' => $request->privacy_consent,
-            'privacy_consent_date' => now()
-        ]);
-
-        return response()->json([
-            'message' => 'Demande acceptée',
-            'relation' => $relation
-        ]);
+            return back()->with('status', 'Demande d\'abonnement acceptée');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur est survenue lors de l\'acceptation de la demande.');
+        }
     }
 
     public function blockUser(User $user)

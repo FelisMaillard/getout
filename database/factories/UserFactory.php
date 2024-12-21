@@ -83,6 +83,7 @@ class UserFactory extends Factory
             'tag' => 'admin_getout',
             'nom' => 'Admin',
             'bio' => 'Administrateur principal de Getout',
+            'private' => true,
             'email' => 'admin@getout.fr',
             'password' => Hash::make('*02FeNalAdmin#Getout@2025$'),
         ]);

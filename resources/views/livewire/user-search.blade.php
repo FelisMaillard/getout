@@ -5,7 +5,6 @@
             type="text"
             class="w-full px-6 py-4 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-lg"
             placeholder="Rechercher un utilisateur..."
-            autocomplete="off"
             value="{{ old('query', session('query', '')) }}"
         >
         <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -35,12 +34,24 @@
                             $existingRelation = Auth::user()->sentRelations()->where('friend_id', $user->id)->first();
                         @endphp
                         @if($existingRelation && $existingRelation->status === 'pending')
-                            <button disabled>Envoyé</button>
+                            <button class="bg-purple-600 rounded-xl px-4 py-2" disabled>
+                                @if($user->private)
+                                    Demande Envoyé
+                                    @else
+                                    Following
+                                    @endif
+                            </button>
                         @else
                             <form action="{{ route('relations.send', ['userTag' => $user->tag]) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="query" value="{{ session('query', '') }}">
-                                <button type="submit">+ Ajouter</button>
+                                <button class="bg-purple-600 rounded-xl px-4 py-2" type="submit">
+                                    @if($user->private)
+                                    Demande de Follow
+                                    @else
+                                    Follow
+                                    @endif
+                                </button>
                             </form>
                         @endif
                     </div>

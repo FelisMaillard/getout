@@ -67,23 +67,39 @@ class ProfileController extends Controller
         // Vérifier si c'est le profil de l'utilisateur connecté
         $isOwnProfile = Auth::id() === $user->id;
 
-        // Vérifier si l'utilisateur courant suit déjà cet utilisateur
-        $isFollowing = !$isOwnProfile && Auth::user()->sentRelations()
-            ->where('friend_id', $user->id)
-            ->where('status', 'accepted')
-            ->exists();
+        // Variables à passer à la vue uniquement si ce n'est pas le profil de l'utilisateur connecté
+        $isFollowing = false;
+        $hasPendingRequest = false;
 
-        // Vérifier s'il y a une demande en attente
-        $hasPendingRequest = !$isOwnProfile && Auth::user()->sentRelations()
-            ->where('friend_id', $user->id)
-            ->where('status', 'pending')
-            ->exists();
+        if (!$isOwnProfile) {
+            // Vérifier si l'utilisateur courant suit déjà cet utilisateur
+            $isFollowing = Auth::user()->sentRelations()
+                ->where('friend_id', $user->id)
+                ->where('status', 'accepted')
+                ->exists();
+
+            // Vérifier s'il y a une demande en attente
+            $hasPendingRequest = Auth::user()->sentRelations()
+                ->where('friend_id', $user->id)
+                ->where('status', 'pending')
+                ->exists();
+        }
+
+        // Pour le profil personnel, récupérer les demandes en attente
+        $pendingRequests = [];
+        if ($isOwnProfile) {
+            $pendingRequests = $user->receivedRelations()
+                ->with('user') // Charger les données de l'utilisateur qui a fait la demande
+                ->where('status', 'pending')
+                ->get();
+        }
 
         return view('profile.show', [
             'user' => $user,
             'isOwnProfile' => $isOwnProfile,
             'isFollowing' => $isFollowing,
             'hasPendingRequest' => $hasPendingRequest,
+            'pendingRequests' => $pendingRequests,
         ]);
     }
 }

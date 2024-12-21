@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('friend_id')->constrained('users')->onDelete('cascade');
+            $table->timestamp('read_at')->nullable();
             $table->enum('status', ['pending', 'accepted', 'blocked'])->default('pending');
             $table->boolean('privacy_consent')->default(false);
             $table->timestamp('privacy_consent_date')->nullable();
