@@ -15,14 +15,35 @@ class UserRelationController extends Controller
         // Récupérer l'utilisateur par son tag
         $user = User::where('tag', $userTag)->firstOrFail();
 
-        // Vérifier que l'utilisateur n'envoie pas une demande à lui-même
+        // Vérifier s'il existe déjà une relation (incluant les soft deleted)
         $existingRelation = Auth::user()->sentRelations()
+            ->withTrashed()  // Ajouter cette ligne pour inclure les relations soft deleted
             ->where('friend_id', $user->id)
             ->first();
 
+        // Vérifier que l'utilisateur n'envoie pas une demande à lui-même
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Vous ne pouvez pas vous abonner à vous-même.');
+        }
+
+        // Si aucune relation n'existe (même soft deleted)
         if (!$existingRelation) {
-            // Créer une nouvelle relation
-            $relation = UserRelation::create([
+            // Vérifier si l'utilisateur a un compte privé
+            if (!$user->private) {
+                // Créer une relation acceptée directement
+                UserRelation::create([
+                    'user_id' => Auth::id(),
+                    'friend_id' => $user->id,
+                    'status' => 'accepted',
+                    'privacy_consent' => true,
+                    'privacy_consent_date' => now()
+                ]);
+
+                return redirect()->back()->with('status', 'Vous suivez maintenant cet utilisateur');
+            }
+
+            // Créer une nouvelle relation dans le cas contraire
+            UserRelation::create([
                 'user_id' => Auth::id(),
                 'friend_id' => $user->id,
                 'status' => 'pending',
@@ -31,10 +52,29 @@ class UserRelationController extends Controller
             ]);
 
             return redirect()->back()->with('status', 'Demande d\'abonnement envoyée');
-        } else if ($existingRelation->status === 'accepted') {
+        }
+        // Si la relation existe et n'est pas soft deleted
+        else if (!$existingRelation->trashed() && $existingRelation->status === 'accepted') {
             // Supprimer la relation existante (unfollow)
             $existingRelation->delete();
             return redirect()->back()->with('status', 'Vous ne suivez plus cet utilisateur');
+        }
+        // Si la relation existe mais est soft deleted
+        else if ($existingRelation->trashed()) {
+            // Restaurer la relation
+            $existingRelation->restore();
+            // Mettre à jour son statut
+            $existingRelation->update([
+                'status' => !$user->private ? 'accepted' : 'pending',
+                'privacy_consent' => true,
+                'privacy_consent_date' => now()
+            ]);
+
+            $message = !$user->private ?
+                'Vous suivez maintenant cet utilisateur' :
+                'Demande d\'abonnement envoyée';
+
+            return redirect()->back()->with('status', $message);
         }
 
         return redirect()->back()->with('status', 'Une demande est déjà en cours');
@@ -93,6 +133,7 @@ class UserRelationController extends Controller
             return response()->json(['message' => 'Non autorisé'], 403);
         }
 
+        // Supprimer la relation
         $relation->delete();
 
         return response()->json(['message' => 'Relation supprimée']);

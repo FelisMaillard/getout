@@ -83,11 +83,11 @@
                     <div class="flex gap-6">
                         <div class="text-center">
                             <span class="block text-white font-bold">{{ $user->followersCount() }}</span>
-                            <span class="text-gray-400 text-sm">abonnés</span>
+                            <span class="text-gray-400 text-sm">Abonnés</span>
                         </div>
                         <div class="text-center">
                             <span class="block text-white font-bold">{{ $user->followingCount() }}</span>
-                            <span class="text-gray-400 text-sm">abonnements</span>
+                            <span class="text-gray-400 text-sm">Abonnements</span>
                         </div>
                     </div>
                 </div>

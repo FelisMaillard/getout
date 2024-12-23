@@ -33,7 +33,7 @@
                         @php
                             $existingRelation = Auth::user()->sentRelations()->where('friend_id', $user->id)->first();
                         @endphp
-                        @if($existingRelation && $existingRelation->status === 'pending')
+                        @if($existingRelation)
                             <button class="bg-purple-600 rounded-xl px-4 py-2" disabled>
                                 @if($user->private)
                                     Demande Envoyé
