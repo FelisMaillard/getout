@@ -12,16 +12,11 @@
     <div class="mb-6 border-b border-gray-800 pb-6">
         <h3 class="text-lg font-medium text-white mb-4">Photo de profil</h3>
 
-        <!-- Affichage de la photo actuelle -->
-        <div class="flex items-center gap-4 mb-4">
+        <!-- Affichage de la photo actuelle et input sur la même ligne -->
+        <div class="flex items-start gap-4">
             @if($user->profile_photo_url)
                 <div class="relative">
-                    <!-- Debug de l'URL -->
-                    @php
-                        \Log::info('Affichage photo', ['url' => $user->profile_photo_url]);
-                    @endphp
-
-                    <img src="{{ asset($user->profile_photo_url) }}"
+                    <img src="{{ Storage::url($user->profile_photo_url) }}"
                         alt="Photo de profil actuelle"
                         class="w-20 h-20 rounded-full object-cover">
 
@@ -41,27 +36,17 @@
                     <span class="text-2xl text-white">{{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}</span>
                 </div>
             @endif
-        </div>
 
-        <!-- Message d'erreur global -->
-        @if(session('status'))
-            <div class="mb-4 text-sm text-green-400">
-                {{ session('status') }}
-            </div>
-        @endif
+            <!-- Formulaire d'upload de photo -->
+            <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data" class="flex-1 flex flex-col">
+                @csrf
+                @method('PUT')
 
-        <!-- Formulaire d'upload de photo -->
-        <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-
-            <div class="flex items-end gap-4">
-                <div class="flex-1">
+                <div>
                     <input type="file"
                         id="photo"
                         name="photo"
                         accept="image/jpeg,image/png,image/webp"
-                        onchange="this.form.submit()"
                         class="block w-full text-sm text-gray-400
                                 file:mr-4 file:py-2 file:px-4
                                 file:rounded-full file:border-0
@@ -69,14 +54,18 @@
                                 file:bg-purple-600 file:text-white
                                 hover:file:bg-purple-700">
                     <p class="mt-1 text-sm text-gray-500">
-                        La photo sera automatiquement mise à jour dès sa sélection.
                         Formats acceptés : JPG, PNG, WebP. Taille maximale : 2MB.
                     </p>
                 </div>
-            </div>
-            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
-        </form>
+
+                <button type="submit" class="mt-auto text-sm text-white bg-purple-600 rounded-md px-4 py-2 hover:bg-purple-700">
+                    Enregistrer
+                </button>
+                <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+            </form>
+        </div>
     </div>
+
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf

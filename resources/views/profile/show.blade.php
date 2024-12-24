@@ -16,11 +16,19 @@
         <!-- Carte de profil -->
         <div class="bg-black rounded-lg p-6 border border-gray-800">
             <!-- Photo de profil mobile -->
-            <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">
-                <div class="w-32 h-32 md:w-72 md:h-72 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
-                    {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+            @if($user->profile_photo_url)
+                <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">
+                    <img src="{{ Storage::url($user->profile_photo_url) }}"
+                         alt="Photo de profil"
+                         class="w-32 h-32 rounded-full object-cover">
                 </div>
-            </div>
+            @else
+                <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">
+                    <div class="w-32 h-32 md:w-72 md:h-72 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
+                        {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+                    </div>
+                </div>
+            @endif
 
             <!-- Ligne séparatrice mobile -->
             <div class="md:hidden flex justify-center items-center h-10">
@@ -29,9 +37,17 @@
 
             <div class="flex gap-2 md:gap-6">
                 <!-- Photo de profil desktop -->
-                <div class="hidden md:flex md:w-32 md:h-32 rounded-full overflow-hidden bg-purple-600 items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
-                    {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
-                </div>
+                @if($user->profile_photo_url)
+                    <div class="hidden md:flex md:w-32 md:h-32 rounded-full overflow-hidden">
+                        <img src="{{ Storage::url($user->profile_photo_url) }}"
+                             alt="Photo de profil"
+                             class="w-32 h-32 object-cover">
+                    </div>
+                @else
+                    <div class="hidden md:flex md:w-32 md:h-32 rounded-full overflow-hidden bg-purple-600 items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
+                        {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+                    </div>
+                @endif
 
                 <!-- Informations -->
                 <div class="flex-1 space-y-4">

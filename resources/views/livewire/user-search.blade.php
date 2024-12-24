@@ -34,9 +34,15 @@
                     <div class="flex items-center justify-between p-4">
                         <!-- Information utilisateur -->
                         <a href="{{ "@" . $user->tag }}" class="flex items-center space-x-4 flex-1">
-                            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                                {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
-                            </div>
+                            @if($user->profile_photo_url)
+                                <img src="{{ Storage::url($user->profile_photo_url) }}"
+                                     alt="Photo de profil"
+                                     class="w-12 h-12 rounded-full object-cover">
+                            @else
+                                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
+                                </div>
+                            @endif
                             <div>
                                 <h3 class="text-white font-semibold">{{ $user->prenom }} {{ $user->nom }}</h3>
                                 <p class="text-gray-400">{{ "@" . $user->tag }}</p>

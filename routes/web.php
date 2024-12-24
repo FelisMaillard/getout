@@ -6,6 +6,7 @@ use App\Http\Controllers\Pages\UserRelationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Settings\ProfileController as SettingsProfileController;
+use App\Http\Controllers\Settings\ProfilePhotoController;
 use Illuminate\Support\Facades\Route;
 
 // Route principale (home)
@@ -25,8 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/settings/profile', [SettingsProfileController::class, 'update'])->name('profile.update');
     Route::delete('/settings/profile', [SettingsProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::put('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
-    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+    Route::put('/profile/photo', [ProfilePhotoController::class, 'update'])->name('profile.photo.update');
+    Route::delete('/profile/photo', [ProfilePhotoController::class, 'destroy'])->name('profile.photo.delete');
 
     // Routes pour les amitiés
     Route::post('/relations/{userTag}', [UserRelationController::class, 'sendRequest'])->name('relations.send');
