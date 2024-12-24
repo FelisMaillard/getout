@@ -1,26 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+    // Récupérer la relation existante pour l'utilisateur cible
+    $existingRelation = Auth::user()->sentRelations()
+        ->withTrashed()
+        ->where('friend_id', $user->id)
+        ->first();
+@endphp
+
+
 <div class="min-h-screen bg-gray-950 py-24 md:py-10">
     <div class="max-w-md md:max-w-2xl mx-auto px-4">
-
         <!-- Carte de profil -->
         <div class="bg-black rounded-lg p-6 border border-gray-800">
-
-            <!-- Photo de profil -->
+            <!-- Photo de profil mobile -->
             <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">
                 <div class="w-32 h-32 md:w-72 md:h-72 rounded-full overflow-hidden bg-purple-600 flex items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
                     {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
                 </div>
             </div>
 
-            <!-- Ligne séparatrice -->
+            <!-- Ligne séparatrice mobile -->
             <div class="md:hidden flex justify-center items-center h-10">
                 <div class="w-full max-w-md h-[1px] bg-gray-800 mb-6"></div>
             </div>
 
             <div class="flex gap-2 md:gap-6">
-                <!-- Photo de profil -->
+                <!-- Photo de profil desktop -->
                 <div class="hidden md:flex md:w-32 md:h-32 rounded-full overflow-hidden bg-purple-600 items-center justify-center text-white text-xl md:text-3xl font-bold shrink-0">
                     {{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}
                 </div>
@@ -34,29 +42,22 @@
                             <div class="text-white font-medium">{{ $user->prenom }} {{ $user->nom }}</div>
                         </div>
 
-                        <div class="flex gap-1 md:gap-2">
+                        <!-- Actions -->
+                        <div class="flex gap-2">
                             @if(!$isOwnProfile)
-                                <form action="{{ route('relations.send', $user->tag) }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                            class="px-2 py-2 md:px-4 md:py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition">
-                                        @if($isFollowing)
-                                            Ne plus suivre
-                                        @elseif($hasPendingRequest)
-                                            Demande envoyée
-                                        @else
-                                            Suivre
-                                        @endif
-                                    </button>
-                                </form>
+                                <div class="flex gap-2">
+                                    <!-- Boutons de relation -->
+                                    <div class="flex-shrink-0">
+                                        @include('components.relation-button', ['targetUser' => $user])
+                                    </div>
 
-                                <form action="{{ route('relations.block', $user->tag) }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                            class="px-2 py-2 md:px-4 md:py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg transition">
-                                        Bloquer
-                                    </button>
-                                </form>
+                                    <!-- Bouton de blocage -->
+                                    @if($existingRelation->status !== 'blocked')
+                                    <div class="flex-shrink-0">
+                                        @include('components.block-button', ['targetUser' => $user])
+                                    </div>
+                                    @endif
+                                </div>
                             @else
                                 <a href="{{ route('profile.edit') }}"
                                    class="px-2 py-2 md:px-4 md:py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg transition">
@@ -95,5 +96,4 @@
         </div>
     </div>
 </div>
-
 @endsection

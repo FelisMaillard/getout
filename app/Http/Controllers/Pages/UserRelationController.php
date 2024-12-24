@@ -107,35 +107,78 @@ class UserRelationController extends Controller
         }
     }
 
-    public function blockUser(User $user)
+    /**
+     * Gère le blocage/déblocage d'un utilisateur
+     *
+     * @param string $friendTag Le tag de l'utilisateur à bloquer/débloquer
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function blockUser($friendTag)
     {
-        $relation = UserRelation::firstOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'friend_id' => $user->id
-            ],
-            [
-                'status' => 'blocked'
-            ]
-        );
+        // Récupérer l'utilisateur cible
+        $targetUser = User::where('tag', $friendTag)->firstOrFail();
 
-        if ($relation->status !== 'blocked') {
-            $relation->update(['status' => 'blocked']);
+        // Vérifier qu'on ne se bloque pas soi-même
+        if ($targetUser->id === Auth::id()) {
+            return back()->with('error', 'Action non autorisée.');
         }
 
-        return response()->json(['message' => 'Utilisateur bloqué']);
+        try {
+            // Récupérer la relation existante (y compris soft deleted)
+            $relation = UserRelation::withTrashed()
+                ->where('user_id', Auth::id())
+                ->where('friend_id', $targetUser->id)
+                ->first();
+
+            if ($relation) {
+                if ($relation->status === 'blocked') {
+                    // Si l'utilisateur est bloqué, on restaure la relation et on la met en "accepted"
+                    $relation->status = 'accepted';
+                    $relation->save();
+                    $message = 'Utilisateur débloqué avec succès.';
+                } else {
+                    // Mettre à jour en tant que bloqué
+                    $relation->status = 'blocked';
+                    $relation->privacy_consent = true;
+                    $relation->privacy_consent_date = now();
+                    $relation->save();
+
+                    // Si une relation inverse existe (l'autre utilisateur nous suit), on la soft delete
+                    UserRelation::where('user_id', $targetUser->id)
+                        ->where('friend_id', Auth::id())
+                        ->delete();
+
+                    $message = 'Utilisateur bloqué avec succès.';
+                }
+            } else {
+                // Créer une nouvelle relation de blocage
+                $relation = UserRelation::create([
+                    'user_id' => Auth::id(),
+                    'friend_id' => $targetUser->id,
+                    'status' => 'blocked',
+                    'privacy_consent' => true,
+                    'privacy_consent_date' => now()
+                ]);
+
+                $message = 'Utilisateur bloqué avec succès.';
+            }
+
+            return back()->with('status', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Une erreur est survenue lors de l\'action.');
+        }
     }
 
     public function removeRelation(UserRelation $relation)
     {
         // Vérifier que l'utilisateur est autorisé
         if ($relation->user_id !== Auth::id() && $relation->friend_id !== Auth::id()) {
-            return response()->json(['message' => 'Non autorisé'], 403);
+            return back()->with(['error', 'Non autorisé'], 403);
         }
 
         // Supprimer la relation
         $relation->delete();
 
-        return response()->json(['message' => 'Relation supprimée']);
+        return back()->with('status', 'Relation supprimée caca');
     }
 }

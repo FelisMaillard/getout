@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routes pour les amitiés
     Route::post('/relations/{userTag}', [UserRelationController::class, 'sendRequest'])->name('relations.send');
     Route::post('/relations/{relation}/accept', [UserRelationController::class, 'acceptRequest'])->name('relations.accept');
-    Route::post('/relations/{user}/block', [UserRelationController::class, 'blockUser'])->name('relations.block');
+    Route::post('/relations/{userTag}/block', [UserRelationController::class, 'blockUser'])->name('relations.block');
     Route::delete('/relations/{relation}', [UserRelationController::class, 'removeRelation'])->name('relations.remove');
 
     // Routes des notifications
