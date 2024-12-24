@@ -52,7 +52,7 @@
                                     </div>
 
                                     <!-- Bouton de blocage -->
-                                    @if($existingRelation->status !== 'blocked')
+                                    @if(!$existingRelation || $existingRelation->status !== 'blocked')
                                     <div class="flex-shrink-0">
                                         @include('components.block-button', ['targetUser' => $user])
                                     </div>

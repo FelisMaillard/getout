@@ -27,10 +27,12 @@
                     @if(session('query'))
                         <input type="hidden" name="query" value="{{ session('query') }}">
                     @endif
-                    <button type="submit"
-                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-colors duration-200"
-                            onclick="return confirm('En suivant cet utilisateur, vous acceptez le traitement de vos données conformément à notre politique de confidentialité. Continuer ?')">
-                        Follow
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-colors duration-200">
+                        @if($targetUser->private)
+                            Demande de Follow
+                        @else
+                            Follow
+                        @endif
                     </button>
                 </form>
             @elseif($existingRelation->status === 'pending')
@@ -61,17 +63,8 @@
                         <input type="hidden" name="query" value="{{ session('query') }}">
                     @endif
                     <button type="submit"
-                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-colors duration-200"
-                            onclick="return confirm('En suivant cet utilisateur, vous acceptez le traitement de vos données conformément à notre politique de confidentialité. Continuer ?')">
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl transition-colors duration-200">
                         {{ $targetUser->private ? 'Demande de Follow' : 'Follow' }}
-                    </button>
-                </form>
-                <form action="{{ route('relations.block', ['userTag' => $targetUser->tag]) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit"
-                            class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition-colors duration-200"
-                            onclick="return confirm('Êtes-vous sûr de vouloir bloquer cet utilisateur ?')">
-                        Bloquer
                     </button>
                 </form>
             </div>

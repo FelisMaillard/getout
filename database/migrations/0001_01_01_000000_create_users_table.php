@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('private')->default(false);
+            $table->timestamp('last_tag_change')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

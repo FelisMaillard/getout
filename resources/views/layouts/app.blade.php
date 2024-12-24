@@ -173,7 +173,7 @@
                 <!-- Bottom Section -->
                 <div class="px-2 pb-4 space-y-2">
                     <!-- Profile -->
-                    <a href="{{ "@" . $user->tag }}" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
+                    <a href="{{ route('profile.show', ['tag' => Auth::user()->tag]) }}" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
                         <div class="w-6 flex justify-center">
                             @if(Auth::user()->profile_photo_url)
                                 <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="w-6 h-6 rounded-full">
@@ -255,7 +255,7 @@
                     <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Notifications</span>
                 </a>
 
-                <a href="{{ "@" . $user->tag }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
+                <a href="{{ route('profile.show', ['tag' => Auth::user()->tag]) }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
                     @if(Auth::user()->profile_photo_url)
                         <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="w-6 h-6 rounded-full">
                     @else
