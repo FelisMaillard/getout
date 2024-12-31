@@ -141,13 +141,13 @@
 
                         <!-- Messages -->
                         <li>
-                            <a href="#" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
+                            <a href="{{ route('servers.index') }}" class="flex items-center p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
                                 <div class="w-6 flex justify-center">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
                                     </svg>
                                 </div>
-                                <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Messages</span>
+                                <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Groupes</span>
                             </a>
                         </li>
 
@@ -235,7 +235,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
+                <a href="{{ route('servers.index') }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
                     </svg>

@@ -7,7 +7,14 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Settings\ProfileController as SettingsProfileController;
 use App\Http\Controllers\Settings\ProfilePhotoController;
+use App\Http\Controllers\Servers\ServerController;
+use App\Http\Controllers\Servers\ServerMemberController;
+use App\Http\Controllers\Servers\ChannelController;
+use App\Http\Controllers\Servers\MessageController;
+use App\Http\Controllers\Servers\ServerInviteController;
+
 use Illuminate\Support\Facades\Route;
+
 
 // Route principale (home)
 Route::get('/', function () {
@@ -41,6 +48,52 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Profile public routes
     Route::get('/@{tag}', [ProfileController::class, 'show'])->name('profile.show');
+
+    // Routes des serveurs
+    Route::prefix('servers')->name('servers.')->group(function () {
+        // Listing et création
+        Route::get('/', [ServerController::class, 'index'])->name('index');
+        Route::get('/create', [ServerController::class, 'create'])->name('create');
+        Route::post('/', [ServerController::class, 'store'])->name('store');
+
+        // Gestion d'un serveur spécifique
+        Route::prefix('{server}')->group(function () {
+            // Routes du serveur
+            Route::get('/', [ServerController::class, 'show'])->name('show');
+            Route::get('/edit', [ServerController::class, 'edit'])->name('edit');
+            Route::put('/', [ServerController::class, 'update'])->name('update');
+            Route::delete('/', [ServerController::class, 'destroy'])->name('destroy');
+
+            // Routes des membres
+            Route::prefix('members')->name('members.')->group(function () {
+                Route::post('/', [ServerMemberController::class, 'store'])->name('store');
+                Route::put('{member}', [ServerMemberController::class, 'update'])->name('update');
+                Route::delete('{member}', [ServerMemberController::class, 'destroy'])->name('destroy');
+            });
+
+            // Routes des channels
+            Route::prefix('channels')->name('channels.')->group(function () {
+                Route::post('/', [ChannelController::class, 'store'])->name('store');
+                Route::get('{channel}', [ChannelController::class, 'show'])->name('show');
+                Route::put('{channel}', [ChannelController::class, 'update'])->name('update');
+                Route::delete('{channel}', [ChannelController::class, 'destroy'])->name('destroy');
+
+                // Routes des messages dans un channel
+                Route::prefix('{channel}/messages')->name('messages.')->group(function () {
+                    Route::post('/', [MessageController::class, 'store'])->name('store');
+                    Route::put('{message}', [MessageController::class, 'update'])->name('update');
+                    Route::delete('{message}', [MessageController::class, 'destroy'])->name('delete');
+                });
+            });
+
+            // Routes des invitations
+            Route::prefix('invites')->name('invites.')->group(function () {
+                Route::post('/', [ServerInviteController::class, 'store'])->name('store');
+                Route::post('{invite}/accept', [ServerInviteController::class, 'accept'])->name('accept');
+                Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])->name('reject');
+            });
+        });
+    });
 });
 
 require __DIR__.'/auth.php';

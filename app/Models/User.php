@@ -84,4 +84,30 @@ class User extends Authenticatable
             ->whereNotNull('privacy_consent_date')
             ->exists();
     }
+
+    /**
+     * Les serveurs dont l'utilisateur est propriétaire
+     */
+    public function ownedServers()
+    {
+        return $this->hasMany(Server::class, 'owner_id');
+    }
+
+    /**
+     * Les serveurs dont l'utilisateur est membre
+     */
+    public function memberServers()
+    {
+        return $this->belongsToMany(Server::class, 'server_members')
+                    ->withPivot('role', 'privacy_consent', 'privacy_consent_date')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Tous les serveurs de l'utilisateur (possédés + membre)
+     */
+    public function servers()
+    {
+        return $this->memberServers();
+    }
 }
