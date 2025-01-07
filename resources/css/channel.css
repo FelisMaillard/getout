@@ -1,0 +1,7 @@
+@media (max-width: 768px) {
+    /* Ajuster la hauteur du contenu pour compenser l'absence de la navbar */
+    .min-h-screen {
+        height: 100vh !important;
+        padding-bottom: 0 !important;
+    }
+}

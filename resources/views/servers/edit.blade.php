@@ -3,7 +3,7 @@
 @section('title', 'Modifier ' . $server->name)
 
 @section('content')
-<div class="min-h-screen bg-gray-950 py-12">
+<div class="min-h-screen bg-black py-12">
     <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <div class="bg-black rounded-lg border border-gray-800 p-6">
             <div class="flex justify-between items-center mb-6">

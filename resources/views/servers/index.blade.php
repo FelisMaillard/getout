@@ -6,7 +6,7 @@
 @section('meta_description', 'Liste de vos serveurs sur GetOut')
 
 @section('content')
-<div class="min-h-screen bg-gray-950 py-12">
+<div class="min-h-screen bg-black py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">Mes serveurs</h1>

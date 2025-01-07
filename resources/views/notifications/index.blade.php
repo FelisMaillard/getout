@@ -3,12 +3,12 @@
 @section('title', 'Notifications')
 
 @section('content')
-<div class="min-h-screen bg-gray-950 py-12">
+<div class="min-h-screen bg-black py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <h1 class="text-2xl font-bold text-white mb-8">Notifications</h1>
 
         <!-- Sections des demandes d'abonnement -->
-        <div class="bg-black rounded-lg border border-gray-800 overflow-hidden">
+        <div class="bg-black overflow-hidden">
             <div class="p-4 border-b border-gray-800">
                 <h2 class="text-lg font-medium text-white">Demandes d'abonnement</h2>
             </div>

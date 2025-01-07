@@ -5,7 +5,7 @@
 @section('meta_description', 'Bienvenue sur GetOut - Connectez-vous avec vos amis et partagez vos moments')
 
 @section('content')
-<div class="min-h-screen bg-gray-950 flex flex-col">
+<div class="min-h-screen bg-black flex flex-col">
     <div class="flex-1 flex flex-col items-center justify-start pt-20 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-white mb-8">Fil d’actualités</h1>
 

@@ -11,10 +11,10 @@
 @endphp
 
 
-<div class="min-h-screen bg-gray-950 py-24 md:py-10">
+<div class="min-h-screen bg-black py-24 md:py-10">
     <div class="max-w-md md:max-w-2xl mx-auto px-4">
         <!-- Carte de profil -->
-        <div class="bg-black rounded-lg p-6 border border-gray-800">
+        <div class="bg-black p-2">
             <!-- Photo de profil mobile -->
             @if($user->profile_photo_url)
                 <div class="md:hidden flex items-center justify-center mb-6 md:mb-10">

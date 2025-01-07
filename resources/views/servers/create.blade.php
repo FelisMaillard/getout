@@ -5,7 +5,7 @@
 @section('meta_description', 'Créez un nouveau serveur sur GetOut')
 
 @section('content')
-<div class="min-h-screen bg-gray-950 py-12">
+<div class="min-h-screen bg-black py-12">
     <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <div class="bg-black rounded-lg border border-gray-800 p-6">
             <h1 class="text-2xl font-bold text-white mb-6">Créer un serveur</h1>

@@ -102,7 +102,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-950 text-white antialiased h-full">
+<body class="bg-black text-white antialiased h-full">
     <div class="min-h-screen flex">
         <!-- Sidebar pour desktop -->
         <nav class="fixed inset-y-0 left-0 z-50 hidden md:flex group/sidebar">
@@ -221,7 +221,7 @@
             </div>
         </div>
 
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-gray-800">
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-gray-800 channel-navbar">
             <div class="flex justify-around items-center p-2">
                 <a href="{{ route('home') }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
