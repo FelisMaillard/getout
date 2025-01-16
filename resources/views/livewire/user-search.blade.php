@@ -27,7 +27,8 @@
         @else
             @foreach($users as $user)
                 <div class="bg-black border border-gray-800 hover:bg-gray-950 transition-colors duration-200
-                    @if($loop->first) rounded-t-lg border-b-0
+                    @if($loop->first && $loop->last) rounded-lg
+                    @elseif($loop->first) rounded-t-lg border-b-0
                     @elseif($loop->last) rounded-b-lg border-t-0
                     @else border-y-0
                     @endif">

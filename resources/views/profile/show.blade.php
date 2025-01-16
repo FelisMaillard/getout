@@ -54,8 +54,8 @@
                     <!-- Nom et actions -->
                     <div class="flex justify-between items-start">
                         <div>
-                            <h1 class="text-xl font-medium text-white">{{ '@' . $user->tag }}</h1>
-                            <div class="text-white font-medium">{{ $user->prenom }} {{ $user->nom }}</div>
+                            <h1 class="text-xl font-medium text-white">{{ $user->prenom }} {{ $user->nom }}</h1>
+                            <div class="text-white font-medium">{{ '@' . $user->tag }}</div>
                         </div>
 
                         <!-- Actions -->
