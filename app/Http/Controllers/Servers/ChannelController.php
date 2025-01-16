@@ -42,7 +42,13 @@ class ChannelController extends Controller
             ->latest()
             ->paginate(50);
 
-        return view('channels.show', compact('server', 'channel', 'messages'));
+        if (request()->ajax()) {
+            return response()->json([
+                'html' => view('channels._messages', compact('server', 'channel', 'messages'))->render()
+            ]);
+        }
+
+        return redirect()->route('servers.show', ['server' => $server, 'currentChannel' => $channel->id]);
     }
 
     public function update(Request $request, Server $server, Channel $channel)

@@ -18,9 +18,6 @@ return new class extends Migration
             $table->boolean('is_private')->default(false);
             $table->timestamps();
             $table->softDeletes();
-
-            // Un nom de channel doit être unique dans un serveur
-            $table->unique(['server_id', 'slug']);
         });
     }
 

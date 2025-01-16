@@ -64,7 +64,7 @@ class ServerController extends Controller
             ->with('success', 'Serveur créé avec succès');
     }
 
-    public function show(Server $server)
+    public function show(Server $server, Request $request)
     {
         Gate::authorize('view-server', $server);
 
@@ -77,7 +77,18 @@ class ServerController extends Controller
             ->with('user')
             ->get();
 
-        return view('servers.show', compact('server', 'channels', 'members'));
+        $currentChannel = null;
+        $messages = null;  // Initialisation de $messages
+
+        if ($request->has('currentChannel')) {
+            $currentChannel = $server->channels()->findOrFail($request->currentChannel);
+            $messages = $currentChannel->messages()
+                ->with('user')
+                ->latest()
+                ->paginate(50);
+        }
+
+        return view('servers.show', compact('server', 'channels', 'members', 'currentChannel', 'messages'));
     }
 
     public function edit(Server $server)
