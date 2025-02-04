@@ -52,10 +52,15 @@ class User extends Authenticatable
     // Obtenir les amis (relations acceptées)
     public function friends()
     {
-        return $this->sentRelations()
+        return UserRelation::query()
+            ->where(function ($query) {
+                $query->where('user_id', $this->id)
+                      ->orWhere('friend_id', $this->id);
+            })
             ->where('status', 'accepted')
             ->whereNotNull('privacy_consent_date');
     }
+
 
     // Obtenir le nombre de followers (relations acceptées)
     public function followersCount()

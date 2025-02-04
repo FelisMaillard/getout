@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRelation;
+use App\Models\ServerInvite;
 
 class NotificationController extends Controller
 {
@@ -16,20 +17,30 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        // Récupérer les demandes d'abonnement en attente
+        // Demandes d'abonnement existantes
         $pendingRequests = Auth::user()
             ->receivedRelations()
-            ->with('user') // Eager loading pour éviter N+1
+            ->with('user')
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
-            ->paginate(10); // Pagination pour de meilleures performances
+            ->paginate(10);
 
-        // Rendre le nombre de pendingRequests accessible à l'application
-        $pendingRequestsCount = $pendingRequests->total();
+        // Ajout des invitations aux serveurs
+        $serverInvites = ServerInvite::where('invitee_id', Auth::id())
+            ->whereNull('accepted_at')
+            ->whereNull('rejected_at')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                      ->orWhere('expires_at', '>', now());
+            })
+            ->with(['server', 'inviter'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('notifications.index', [
             'pendingRequests' => $pendingRequests,
-            'pendingRequestsCount' => $pendingRequestsCount,
+            'pendingRequestsCount' => $pendingRequests->total(),
+            'serverInvites' => $serverInvites
         ]);
     }
 

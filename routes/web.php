@@ -64,11 +64,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/', [ServerController::class, 'update'])->name('update');
             Route::delete('/', [ServerController::class, 'destroy'])->name('destroy');
 
+            // Route de recherche d'amis
+            Route::get('/search-friends', [ServerInviteController::class, 'searchFriends'])
+                ->name('search-friends');
+
             // Routes des membres
             Route::prefix('members')->name('members.')->group(function () {
                 Route::post('/', [ServerMemberController::class, 'store'])->name('store');
                 Route::put('{member}', [ServerMemberController::class, 'update'])->name('update');
                 Route::delete('{member}', [ServerMemberController::class, 'destroy'])->name('destroy');
+            });
+
+            // Routes des invitations
+            Route::prefix('invites')->name('invites.')->group(function () {
+                Route::post('/', [ServerInviteController::class, 'store'])->name('store');
+                Route::post('{invite}/accept', [ServerInviteController::class, 'accept'])->name('accept');
+                Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])->name('reject');
+                Route::delete('{invite}', [ServerInviteController::class, 'cancel'])->name('cancel');
             });
 
             // Routes des channels
@@ -84,13 +96,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::put('{message}', [MessageController::class, 'update'])->name('update');
                     Route::delete('{message}', [MessageController::class, 'destroy'])->name('delete');
                 });
-            });
-
-            // Routes des invitations
-            Route::prefix('invites')->name('invites.')->group(function () {
-                Route::post('/', [ServerInviteController::class, 'store'])->name('store');
-                Route::post('{invite}/accept', [ServerInviteController::class, 'accept'])->name('accept');
-                Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])->name('reject');
             });
         });
     });

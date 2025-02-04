@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('server_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('role', ['owner', 'admin', 'moderator', 'member'])->default('member');
+            $table->enum('role', ['owner', 'admin', 'member'])->default('member');
             $table->boolean('privacy_consent')->default(false);
             $table->timestamp('privacy_consent_date')->nullable();
             $table->timestamp('last_read_at')->nullable();

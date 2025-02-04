@@ -74,6 +74,65 @@
                 @endif
             @endif
         </div>
+
+        <!-- Section des invitations aux serveurs -->
+        <div class="bg-black overflow-hidden mt-8">
+            <div class="p-4 border-b border-gray-800">
+                <h2 class="text-lg font-medium text-white">Invitations aux serveurs</h2>
+            </div>
+
+            @if($serverInvites->isEmpty())
+                <div class="p-4 text-gray-400 text-center">
+                    Aucune invitation en attente
+                </div>
+            @else
+                <div class="divide-y divide-gray-800">
+                    @foreach($serverInvites as $invite)
+                        <div class="p-4 hover:bg-gray-900 transition-colors duration-200">
+                            <div class="flex items-center justify-between">
+                                <!-- Info du serveur -->
+                                <div class="flex-1">
+                                    <h3 class="text-white font-medium">{{ $invite->server->name }}</h3>
+                                    <p class="text-gray-400 text-sm">
+                                        Invité par {{ $invite->inviter->prenom }} {{ $invite->inviter->nom }}
+                                    </p>
+                                    @if($invite->expires_at)
+                                        <p class="text-gray-500 text-xs mt-1">
+                                            Expire {{ $invite->expires_at->diffForHumans() }}
+                                        </p>
+                                    @endif
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex items-center space-x-2">
+                                    <form action="{{ route('servers.invites.accept', ['server' => $invite->server_id, 'invite' => $invite->id]) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                                            Rejoindre
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('servers.invites.reject', ['server' => $invite->server_id, 'invite' => $invite->id]) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                            Refuser
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                @if($serverInvites->hasPages())
+                    <div class="p-4 border-t border-gray-800">
+                        {{ $serverInvites->links() }}
+                    </div>
+                @endif
+            @endif
+        </div>
     </div>
 </div>
 @endsection

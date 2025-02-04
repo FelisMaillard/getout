@@ -77,8 +77,19 @@ class ServerController extends Controller
             ->with('user')
             ->get();
 
+        // Ajout des invitations en attente
+        $pendingInvites = $server->invites()
+            ->whereNull('accepted_at')
+            ->whereNull('rejected_at')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->with(['invitee'])
+            ->get();
+
         $currentChannel = null;
-        $messages = null;  // Initialisation de $messages
+        $messages = null;
 
         if ($request->has('currentChannel')) {
             $currentChannel = $server->channels()->findOrFail($request->currentChannel);
@@ -88,7 +99,14 @@ class ServerController extends Controller
                 ->paginate(50);
         }
 
-        return view('servers.show', compact('server', 'channels', 'members', 'currentChannel', 'messages'));
+        return view('servers.show', compact(
+            'server',
+            'channels',
+            'members',
+            'currentChannel',
+            'messages',
+            'pendingInvites'
+        ));
     }
 
     public function edit(Server $server)
