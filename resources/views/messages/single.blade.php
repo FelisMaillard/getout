@@ -4,6 +4,7 @@
 
     {{-- Message Content Container --}}
     <div class="flex max-w-[80%] {{ $message->user_id === auth()->id() ? 'flex-row-reverse' : '' }}">
+        @if(!$previousMessage || $message->user_id !== $previousMessage->user_id || $message->created_at->diffInMinutes($previousMessage->created_at) >= 5)
             <div class="flex-shrink-0 mr-3">
                 @if($message->user->profile_photo_url)
                     <img src="{{ Storage::url($message->user->profile_photo_url) }}"
@@ -17,21 +18,24 @@
                     </div>
                 @endif
             </div>
+        @endif
 
         {{-- Message Bubble --}}
         <div class="flex flex-col {{ $message->user_id === auth()->id() ? 'items-end' : '' }}">
-            {{-- Username and Timestamp --}}
-            <div class="flex items-center space-x-2 mb-1 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
-                <span class="text-sm font-medium text-gray-300">
-                    {{ $message->user->prenom }} {{ $message->user->nom }}
-                </span>
-                <span class="text-xs text-gray-500">
-                    {{ $message->created_at->format('H:i') }}
-                </span>
-                @if($message->edited_at)
-                    <span class="text-xs text-gray-500">(modifié)</span>
-                @endif
-            </div>
+            @if(!$previousMessage || $message->user_id !== $previousMessage->user_id || $message->created_at->diffInMinutes($previousMessage->created_at) >= 5)
+                {{-- Username and Timestamp --}}
+                <div class="flex items-center space-x-2 mb-1 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
+                    <span class="text-sm font-medium text-gray-300">
+                        {{ $message->user->prenom }} {{ $message->user->nom }}
+                    </span>
+                    <span class="text-xs text-gray-500">
+                        {{ $message->created_at->format('H:i') }}
+                    </span>
+                    @if($message->edited_at)
+                        <span class="text-xs text-gray-500">(modifié)</span>
+                    @endif
+                </div>
+            @endif
 
             {{-- Message Content --}}
             <div class="flex items-end group">
