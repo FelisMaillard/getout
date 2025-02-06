@@ -5,7 +5,7 @@
 @section('meta_description', 'Modifiez vos paramètres de profil sur GetOut')
 
 @section('content')
-    <div class="min-h-screen bg-black py-24 md:py-10">
+    <div class="min-h-screen bg-black py-24 md:py-10 sm:mb-12">
         <div class="max-w-2xl mx-auto px-4">
             <h1 class="text-3xl font-bold text-white mb-8">Paramètres du profil</h1>
 
