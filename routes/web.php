@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::delete('{invite}', [ServerInviteController::class, 'cancel'])->name('cancel');
             });
 
+
             // Routes des channels
             Route::prefix('channels')->name('channels.')->group(function () {
                 Route::post('/', [ChannelController::class, 'store'])->name('store');
@@ -90,11 +91,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::put('{channel}', [ChannelController::class, 'update'])->name('update');
                 Route::delete('{channel}', [ChannelController::class, 'destroy'])->name('destroy');
 
-                // Routes des messages dans un channel
+                // Messages
                 Route::prefix('{channel}/messages')->name('messages.')->group(function () {
                     Route::post('/', [MessageController::class, 'store'])->name('store');
-                    Route::put('{message}', [MessageController::class, 'update'])->name('update');
-                    Route::delete('{message}', [MessageController::class, 'destroy'])->name('delete');
+                    Route::put('/{message}', [MessageController::class, 'update'])->name('update');
+                    Route::delete('/{message}', [MessageController::class, 'destroy'])->name('delete');
                 });
             });
         });

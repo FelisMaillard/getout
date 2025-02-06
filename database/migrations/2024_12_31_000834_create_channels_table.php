@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
-            $table->enum('type', ['text', 'voice', 'announcement'])->default('text');
+            $table->enum('type', ['text', 'announcement'])->default('text');
             $table->boolean('is_private')->default(false);
             $table->timestamps();
             $table->softDeletes();

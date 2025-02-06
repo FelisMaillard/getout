@@ -10,14 +10,34 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('channel_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('content');
-            $table->enum('type', ['text', 'system', 'file'])->default('text');
-            $table->json('metadata')->nullable(); // Pour stocker des infos supplémentaires (fichiers, etc.)
+            $table->foreignId('channel_id')
+                  ->constrained()
+                  ->onDelete('cascade');
+            $table->foreignId('user_id')
+                  ->constrained()
+                  ->onDelete('cascade');
+
+            // Contenu du message
+            $table->text('content')->nullable();
+            $table->enum('type', ['text', 'file', 'system'])->default('text');
+
+            // Informations sur le fichier (si type = file)
+            $table->string('file_name')->nullable();
+            $table->string('file_path')->nullable();
+            $table->string('file_type')->nullable();
+            $table->bigInteger('file_size')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->json('file_metadata')->nullable();
+
+            // Métadonnées du message
+            $table->json('metadata')->nullable();
             $table->timestamp('edited_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            // Index pour améliorer les performances
+            $table->index(['channel_id', 'created_at']);
+            $table->index(['user_id', 'created_at']);
         });
     }
 

@@ -44,6 +44,22 @@ class UserFactory extends Factory
     }
 
     /**
+     * Configure the model factory for Felis admin.
+     */
+    public function felisAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'prenom' => 'Félis',
+            'tag' => 'felis_getout',
+            'nom' => 'Maillard',
+            'bio' => 'Administrateur de Getout',
+            'email' => 'felis.maillard@gmail.com',
+            'password' => Hash::make('*02FelisAdmin2025$'),
+        ]);
+    }
+
+
+    /**
      * Configure the model factory for Elouan admin.
      */
     public function elouanAdmin(): static
@@ -58,20 +74,6 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Configure the model factory for Felis admin.
-     */
-    public function felisAdmin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'prenom' => 'Félis',
-            'tag' => 'felis_getout',
-            'nom' => 'Maillard',
-            'bio' => 'Administrateur de Getout',
-            'email' => 'felis.maillard@gmail.com',
-            'password' => Hash::make('*02FelisAdmin2025$'),
-        ]);
-    }
 
     /**
      * Configure the model factory for main admin.

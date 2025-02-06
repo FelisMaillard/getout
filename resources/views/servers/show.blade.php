@@ -167,6 +167,100 @@
 
 @push('scripts')
 <script>
+// Dans show.blade.php, remplacer la fonction loadChannel par :
+
+function loadChannel(channelId) {
+    fetch(`/servers/{{ $server->id }}/channels/${channelId}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.html) {
+            document.getElementById('main-content').innerHTML = data.html;
+            history.pushState({}, '', `/servers/{{ $server->id }}?currentChannel=${channelId}`);
+            initializeMessageHandlers();
+            scrollToBottom();
+        } else {
+            console.error('No HTML content received');
+        }
+    })
+    .catch(error => {
+        console.error('Error loading channel:', error);
+    });
+}
+
+// Gestionnaire de messages amélioré
+function initializeMessageHandlers() {
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    const fileUpload = document.getElementById('file-upload');
+    const messagesContainer = document.getElementById('messages-container');
+
+    if (messageForm) {
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!messageInput.value.trim()) return;
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    const messagesEnd = document.getElementById('message-end');
+                    messagesEnd.insertAdjacentHTML('beforebegin', data.message);
+                    messageForm.reset();
+                    scrollToBottom();
+                }
+            })
+            .catch(error => console.error('Error sending message:', error));
+        });
+    }
+
+    // Gestionnaire de fichiers
+    if (fileUpload) {
+        fileUpload.addEventListener('change', handleFileUpload);
+    }
+}
+
+function handleFileUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 'file');
+    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+    fetch(window.location.pathname + '/messages', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            const messagesEnd = document.getElementById('message-end');
+            messagesEnd.insertAdjacentHTML('beforebegin', data.message);
+            scrollToBottom();
+        }
+    })
+    .catch(error => console.error('Error uploading file:', error));
+
+    e.target.value = '';
+}
+
 function scrollToBottom() {
     const messagesContainer = document.getElementById('messages-container');
     if (messagesContainer) {
@@ -174,78 +268,10 @@ function scrollToBottom() {
     }
 }
 
-function loadChannel(channelId) {
-    fetch(`/servers/{{ $server->id }}/channels/${channelId}`, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('main-content').innerHTML = data.html;
-        history.pushState({}, '', `/servers/{{ $server->id }}?currentChannel=${channelId}`);
-        initializeMessageHandlers(); // Réinitialisation des gestionnaires après le chargement
-    });
-}
-
-function initializeMessageHandlers() {
-    const messageForm = document.getElementById('message-form');
-    const fileUpload = document.getElementById('file-upload');
-
-    if (messageForm) {
-        messageForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                form.reset();
-                const messagesEnd = document.getElementById('message-end');
-                messagesEnd.insertAdjacentHTML('beforebegin', data.message);
-                scrollToBottom();
-            });
-        });
-    }
-
-    if (fileUpload) {
-        fileUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('type', 'file');
-            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-
-            fetch(window.location.href + '/messages', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messagesEnd = document.getElementById('message-end');
-                messagesEnd.insertAdjacentHTML('beforebegin', data.message);
-                scrollToBottom();
-                e.target.value = '';
-            });
-        });
-    }
-
-    scrollToBottom();
-}
-
-// Initialiser les gestionnaires au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('main-content').querySelector('#messages-container')) {
         initializeMessageHandlers();
+        scrollToBottom();
     }
 });
 </script>

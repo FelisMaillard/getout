@@ -39,16 +39,15 @@ class ChannelController extends Controller
 
         $messages = $channel->messages()
             ->with('user')
-            ->latest()
+            ->orderBy('created_at', 'desc')
             ->paginate(50);
 
         if (request()->ajax()) {
-            return response()->json([
-                'html' => view('channels._messages', compact('server', 'channel', 'messages'))->render()
-            ]);
+            $view = view('channels._messages', compact('server', 'channel', 'messages'))->render();
+            return response()->json(['html' => $view]);
         }
 
-        return redirect()->route('servers.show', ['server' => $server, 'currentChannel' => $channel->id]);
+        return view('servers.show', compact('server', 'channel', 'messages'));
     }
 
     public function update(Request $request, Server $server, Channel $channel)

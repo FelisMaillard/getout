@@ -41,7 +41,9 @@ class Channel extends Model
 
     public function members()
     {
-        return $this->hasMany(ChannelMember::class);
+        return $this->belongsToMany(User::class, 'channel_members')
+            ->withTimestamps()
+            ->withPivot('role');
     }
 
     public function messages()
