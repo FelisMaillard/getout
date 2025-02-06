@@ -44,4 +44,4 @@
             </div>
         </form>
     </x-modal>
-</section>
+</section class="mb-6">
