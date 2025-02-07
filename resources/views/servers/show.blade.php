@@ -7,15 +7,15 @@
         <div class="flex items-center">
             <!-- Bouton menu channels (mobile) -->
             <button onclick="toggleChannelsSidebar()"
-                    class="md:hidden p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    class="md:hidden p-2 mr-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
             </button>
 
-            <!-- Bouton retour (desktop) -->
+            <!-- Bouton retour (visible sur tous les écrans) -->
             <a href="{{ route('servers.index') }}"
-               class="hidden md:flex p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors">
+               class="flex p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
@@ -37,15 +37,15 @@
 
     <!-- Container principal -->
     <div class="flex flex-1 overflow-hidden relative pt-0 md:pt-0 pb-16 md:pb-0">
-        <!-- Overlay mobile -->
+        <!-- Overlay mobile avec z-index inférieur aux sidebars -->
         <div id="mobile-overlay"
-             class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"
+             class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
              onclick="closeAllSidebars()">
         </div>
 
-        <!-- Sidebar Channels -->
+        <!-- Sidebar Channels avec z-index plus élevé -->
         <aside id="channels-sidebar"
-               class="fixed md:static inset-y-0 left-0 w-64 bg-black border-r border-gray-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 flex flex-col">
+               class="fixed md:static inset-y-0 left-0 w-64 bg-black border-r border-gray-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 flex flex-col">
 
             <!-- En-tête du sidebar channels -->
             <div class="p-4 border-b border-gray-800">
@@ -80,6 +80,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Bouton profil utilisateur -->
+            <div class="border-t border-gray-800 p-4">
+                <a href="{{ route('profile.show', ['tag' => Auth::user()->tag]) }}"
+                   class="flex items-center space-x-3 hover:bg-gray-900 p-2 rounded-lg transition-colors duration-200">
+                    <!-- Avatar -->
+                    @if(Auth::user()->profile_photo_url)
+                        <img src="{{ Storage::url(Auth::user()->profile_photo_url) }}"
+                             alt="{{ Auth::user()->prenom }}"
+                             class="w-10 h-10 rounded-full object-cover">
+                    @else
+                        <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">
+                            <span class="text-white text-sm font-medium">
+                                {{ substr(Auth::user()->prenom, 0, 1) }}{{ substr(Auth::user()->nom, 0, 1) }}
+                            </span>
+                        </div>
+                    @endif
+
+                    <!-- Informations utilisateur -->
+                    <div class="min-w-0">
+                        <div class="text-white font-medium truncate">
+                            {{ Auth::user()->prenom }} {{ Auth::user()->nom }}
+                        </div>
+                        <div class="text-gray-400 text-sm truncate">
+                            @{{ Auth::user()->tag }}
+                        </div>
+                    </div>
+                </a>
+            </div>
         </aside>
 
         <!-- Contenu principal -->
@@ -99,9 +128,9 @@
             @endisset
         </main>
 
-        <!-- Sidebar Membres -->
+        <!-- Sidebar Membres avec z-index plus élevé -->
         <aside id="members-sidebar"
-               class="fixed md:static inset-y-0 right-0 w-64 bg-black border-l border-gray-800 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 flex flex-col">
+               class="fixed md:static inset-y-0 right-0 w-64 bg-black border-l border-gray-800 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50 flex flex-col">
 
             <!-- En-tête du sidebar membres -->
             <div class="p-4 border-b border-gray-800">
