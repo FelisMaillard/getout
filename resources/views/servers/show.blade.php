@@ -36,11 +36,11 @@
     </header>
 
     <!-- Container principal -->
-    <div class="flex flex-1 overflow-hidden relative">
+    <div class="flex flex-1 overflow-hidden relative pt-0 md:pt-0 pb-16 md:pb-0">
         <!-- Overlay mobile -->
         <div id="mobile-overlay"
-             onclick="closeAllSidebars()"
-             class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden">
+             class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"
+             onclick="closeAllSidebars()">
         </div>
 
         <!-- Sidebar Channels -->
@@ -204,7 +204,14 @@ function toggleChannelsSidebar() {
 
     sidebar.style.transform = channelsSidebarOpen ? 'translateX(0)' : 'translateX(-100%)';
     document.getElementById('members-sidebar').style.transform = 'translateX(100%)';
-    overlay.classList.toggle('hidden', !channelsSidebarOpen);
+
+    if (channelsSidebarOpen) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Empêche le défilement du body
+    } else {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = ''; // Restaure le défilement
+    }
 }
 
 function toggleMembersSidebar() {
@@ -216,7 +223,14 @@ function toggleMembersSidebar() {
 
     sidebar.style.transform = membersSidebarOpen ? 'translateX(0)' : 'translateX(100%)';
     document.getElementById('channels-sidebar').style.transform = 'translateX(-100%)';
-    overlay.classList.toggle('hidden', !membersSidebarOpen);
+
+    if (membersSidebarOpen) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Empêche le défilement du body
+    } else {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = ''; // Restaure le défilement
+    }
 }
 
 function closeAllSidebars() {
@@ -226,6 +240,7 @@ function closeAllSidebars() {
     document.getElementById('channels-sidebar').style.transform = 'translateX(-100%)';
     document.getElementById('members-sidebar').style.transform = 'translateX(100%)';
     document.getElementById('mobile-overlay').classList.add('hidden');
+    document.body.style.overflow = ''; // Restaure le défilement
 }
 
 function loadChannel(channelId) {
