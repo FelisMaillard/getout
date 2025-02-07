@@ -104,7 +104,7 @@
                             {{ Auth::user()->prenom }} {{ Auth::user()->nom }}
                         </div>
                         <div class="text-gray-400 text-sm truncate">
-                            @{{ Auth::user()->tag }}
+                            {{ '@' . Auth::user()->tag }}
                         </div>
                     </div>
                 </a>
@@ -387,6 +387,19 @@ function showNotification(message, type = 'info') {
         notification.style.transform = 'translateY(100%)';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
+}
+
+function toggleInviteModal(show = true) {
+    const modal = document.getElementById('inviteModal');
+    if (!modal) return;
+
+    if (show) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
 }
 
 // Initialisation au chargement de la page
