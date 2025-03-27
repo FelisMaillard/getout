@@ -1,7 +1,7 @@
 <!-- Modal de création de channel -->
 <div id="create-channel-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
     <div class="min-h-screen px-4 text-center">
-        <div class="inline-block align-middle bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="inline-block align-middle bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-96 mt-20">
             <form action="{{ route('servers.channels.store', $server) }}" method="POST">
                 @csrf
                 <div class="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">

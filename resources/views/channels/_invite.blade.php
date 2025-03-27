@@ -1,7 +1,7 @@
 <!-- Modal d'invitation de membre -->
-<div id="invite-member-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+<div id="invite-member-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 mt-20">
     <div class="min-h-screen px-4 text-center">
-        <div class="inline-block align-middle bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="inline-block align-middle bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-96">
             <div class="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-white mb-4">Inviter un ami</h3>
