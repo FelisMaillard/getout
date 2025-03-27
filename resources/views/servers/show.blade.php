@@ -137,8 +137,9 @@
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-medium text-white">Membres</h2>
                     @if(Gate::allows('update-server', $server))
-                        <button onclick="toggleInviteModal(true)"
-                                class="p-1 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors">
+                        <button
+                            onclick="document.getElementById('invite-member-modal').classList.remove('hidden')"
+                            class="p-1 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -218,6 +219,7 @@
 </div>
 
 @include('channels._modals')
+@include('channels._invite')
 
 @push('scripts')
 <script>
