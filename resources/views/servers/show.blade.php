@@ -273,6 +273,13 @@ function closeAllSidebars() {
 }
 
 function loadChannel(channelId) {
+    // Enregistrer l'état des sidebars avant de mettre à jour le contenu
+    const channelsSidebar = document.querySelector('.w-full.md\\:w-64.bg-black.border-r');
+    const membersSidebar = document.getElementById('members-sidebar');
+
+    const channelsSidebarVisible = channelsSidebar ? window.getComputedStyle(channelsSidebar).display !== 'none' : false;
+    const membersSidebarVisible = membersSidebar ? window.getComputedStyle(membersSidebar).display !== 'none' : false;
+
     fetch(`/servers/{{ $server->id }}/channels/${channelId}`, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
@@ -285,12 +292,27 @@ function loadChannel(channelId) {
         if (data.html) {
             document.getElementById('main-content').innerHTML = data.html;
             history.pushState({}, '', `/servers/{{ $server->id }}?currentChannel=${channelId}`);
+
+            // Restaurer l'état des sidebars si on est sur desktop (>= 768px)
+            if (window.innerWidth >= 768) {
+                if (channelsSidebar && channelsSidebarVisible) {
+                    channelsSidebar.style.display = 'flex';
+                }
+
+                if (membersSidebar && membersSidebarVisible) {
+                    membersSidebar.style.display = 'flex';
+                }
+            }
+
             initializeMessageHandlers();
             scrollToBottom();
-            closeAllSidebars();
+        } else {
+            console.error('No HTML content received');
         }
     })
-    .catch(error => console.error('Error loading channel:', error));
+    .catch(error => {
+        console.error('Error loading channel:', error);
+    });
 }
 
 function initializeMessageHandlers() {
