@@ -14,8 +14,9 @@
 
         <!-- Affichage de la photo actuelle et input sur la même ligne -->
         <div class="flex items-start gap-4">
-            @if($user->profile_photo_url)
-                <div class="relative">
+            <!-- Photo actuelle -->
+            <div id="current-photo-container" class="relative" style="{{ $user->profile_photo_url ? '' : 'display: none;' }}">
+                @if($user->profile_photo_url)
                     <img src="{{ Storage::url($user->profile_photo_url) }}"
                         alt="Photo de profil actuelle"
                         class="w-20 h-20 rounded-full object-cover">
@@ -30,9 +31,20 @@
                             </svg>
                         </button>
                     </form>
-                </div>
-            @else
-                <div class="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center">
+                @endif
+            </div>
+
+            <!-- Conteneur de prévisualisation (caché par défaut) -->
+            <div id="preview-container" class="relative" style="display: none;">
+                <img id="photo-preview"
+                    src="#"
+                    alt="Prévisualisation"
+                    class="w-20 h-20 rounded-full object-cover">
+            </div>
+
+            <!-- Avatar par défaut si pas de photo -->
+            @if(!$user->profile_photo_url)
+                <div id="default-avatar" class="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center">
                     <span class="text-2xl text-white">{{ substr($user->prenom, 0, 1) . substr($user->nom, 0, 1) }}</span>
                 </div>
             @endif
@@ -43,6 +55,7 @@
                 @method('PUT')
 
                 <div>
+                    <label for="photo" class="block text-sm font-medium text-white mb-2">Choisir une nouvelle photo</label>
                     <input type="file"
                         id="photo"
                         name="photo"
@@ -58,7 +71,7 @@
                     </p>
                 </div>
 
-                <button type="submit" class="mt-auto text-sm text-white bg-purple-600 rounded-md px-4 py-2 hover:bg-purple-700">
+                <button id="save-photo-button" type="submit" class="mt-4 text-sm text-white bg-purple-600 rounded-md px-4 py-2 hover:bg-purple-700" style="display: none;">
                     Enregistrer
                 </button>
                 <x-input-error class="mt-2" :messages="$errors->get('photo')" />

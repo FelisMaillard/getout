@@ -4,6 +4,7 @@ import Alpine from 'alpinejs';
 
 import { initializeChannel } from './channel';
 import './messages';
+import './photoPreview.js';
 
 // Initialiser uniquement si on est sur une page de channel
 if (document.querySelector('.channel-page')) {
