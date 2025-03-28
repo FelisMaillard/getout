@@ -16,7 +16,7 @@
         <div class="flex items-start gap-4">
             @if($user->profile_photo_url)
                 <div class="relative">
-                    <img src="{{ Storage::url($user->profile_photo_url) }}"
+                    <img src="{{ asset('uploads/' . $user->profile_photo_url) }}"
                         alt="Photo de profil actuelle"
                         class="w-20 h-20 rounded-full object-cover">
 
