@@ -50,29 +50,6 @@
                     @enderror
                 </div>
 
-                <!-- Preuves (facultatif) -->
-                <div class="mb-6">
-                    <label for="evidence" class="block text-sm font-medium text-white mb-2">
-                        Preuves (facultatif)
-                    </label>
-                    <div class="space-y-2" id="evidence-container">
-                        <div class="flex gap-2">
-                            <input
-                                type="text"
-                                name="evidence[]"
-                                class="flex-1 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                                placeholder="URL ou référence (ex: message ID, capture d'écran, etc.)"
-                            >
-                            <button type="button" onclick="addEvidenceField()" class="px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                                +
-                            </button>
-                        </div>
-                    </div>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Ajoutez des références ou des liens vers des preuves qui appuient votre signalement.
-                    </p>
-                </div>
-
                 <!-- Avertissement -->
                 <div class="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg">
                     <p class="text-sm text-gray-300">
@@ -97,24 +74,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    function addEvidenceField() {
-        const container = document.getElementById('evidence-container');
-        const newField = document.createElement('div');
-        newField.className = 'flex gap-2';
-        newField.innerHTML = `
-            <input
-                type="text"
-                name="evidence[]"
-                class="flex-1 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                placeholder="URL ou référence (ex: message ID, capture d'écran, etc.)"
-            >
-            <button type="button" onclick="this.parentNode.remove()" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                -
-            </button>
-        `;
-        container.appendChild(newField);
-    }
-</script>
 @endsection

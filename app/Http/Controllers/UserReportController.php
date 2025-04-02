@@ -32,8 +32,6 @@ class UserReportController extends Controller
         $validated = $request->validate([
             'type_report_id' => ['required', 'exists:type_report_users,id'],
             'description' => ['required', 'string', 'min:10', 'max:1000'],
-            'evidence' => ['nullable', 'array'],
-            'evidence.*' => ['nullable', 'string', 'max:255']
         ]);
 
         // Vérifier que l'utilisateur ne s'auto-signale pas
@@ -58,7 +56,6 @@ class UserReportController extends Controller
             'reported_user_id' => $user->id,
             'type_report_id' => $validated['type_report_id'],
             'description' => $validated['description'],
-            'evidence' => $validated['evidence'] ?? null,
             'status' => 'pending'
         ]);
 
