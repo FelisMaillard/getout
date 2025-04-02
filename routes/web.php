@@ -12,6 +12,7 @@ use App\Http\Controllers\Servers\ServerMemberController;
 use App\Http\Controllers\Servers\ChannelController;
 use App\Http\Controllers\Servers\MessageController;
 use App\Http\Controllers\Servers\ServerInviteController;
+use App\Http\Controllers\UserReportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/relations/{relation}/accept', [UserRelationController::class, 'acceptRequest'])->name('relations.accept');
     Route::post('/relations/{userTag}/block', [UserRelationController::class, 'blockUser'])->name('relations.block');
     Route::delete('/relations/{relation}', [UserRelationController::class, 'removeRelation'])->name('relations.remove');
+
+    // Routes pour les reports
+    Route::get('/report/user/{user}', [UserReportController::class, 'show'])->name('reports.user.show');
+    Route::post('/report/user/{user}', [UserReportController::class, 'store'])->name('reports.user.store');
 
     // Routes des notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

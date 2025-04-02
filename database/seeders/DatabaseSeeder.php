@@ -6,6 +6,7 @@ use App\Models\ServerMember;
 use App\Models\User;
 use App\Models\Server;
 use App\Models\Channel;
+use App\Models\ReportUser;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -69,6 +70,11 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $elouanId,
                 'role' => 'admin'
             ]);
+        }
+
+        // 5. Créer les report users
+        if (ReportUser::count() === 0) {
+            ReportUser::factory(10)->create();
         }
     }
 }
