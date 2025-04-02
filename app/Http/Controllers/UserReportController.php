@@ -60,6 +60,6 @@ class UserReportController extends Controller
         ]);
 
         return redirect()->route('profile.show', $user->tag)
-            ->with('success', 'Merci pour votre signalement. Notre équipe va examiner ce cas dans les plus brefs délais.');
+            ->with('report_success', 'Votre signalement a été envoyé avec succès. Notre équipe va examiner ce cas dans les plus brefs délais.');
     }
 }
