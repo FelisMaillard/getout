@@ -193,25 +193,27 @@
             @endif
 
             <!-- Liste des membres -->
-            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
                 @foreach($members as $member)
-                    <div class="flex items-center space-x-3">
-                        @if($member->user->profile_photo_url)
-                            <img src="{{ Storage::url($member->user->profile_photo_url) }}"
-                                 alt="{{ $member->user->prenom }} {{ $member->user->nom }}"
-                                 class="w-8 h-8 rounded-full object-cover">
-                        @else
-                            <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                <span class="text-white text-sm font-medium">
-                                    {{ substr($member->user->prenom, 0, 1) . substr($member->user->nom, 0, 1) }}
-                                </span>
+                    <a href="{{ route('profile.show', ['tag' => $member->user->tag]) }}">
+                        <div class="flex items-center space-x-3 mb-2 hover:border-r border-gray-600">
+                            @if($member->user->profile_photo_url)
+                                <img src="{{ Storage::url($member->user->profile_photo_url) }}"
+                                    alt="{{ $member->user->prenom }} {{ $member->user->nom }}"
+                                    class="w-8 h-8 rounded-full object-cover">
+                            @else
+                                <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+                                    <span class="text-white text-sm font-medium">
+                                        {{ substr($member->user->prenom, 0, 1) . substr($member->user->nom, 0, 1) }}
+                                    </span>
+                                </div>
+                            @endif
+                            <div>
+                                <p class="text-white text-sm font-medium">{{ $member->user->prenom }} {{ $member->user->nom }}</p>
+                                <p class="text-gray-400 text-xs">{{ $member->role }}</p>
                             </div>
-                        @endif
-                        <div>
-                            <p class="text-white text-sm font-medium">{{ $member->user->prenom }} {{ $member->user->nom }}</p>
-                            <p class="text-gray-400 text-xs">{{ $member->role }}</p>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </aside>

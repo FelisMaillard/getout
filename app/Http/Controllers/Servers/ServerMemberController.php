@@ -22,8 +22,7 @@ class ServerMemberController extends Controller
         ]);
 
         // Vérifier si l'utilisateur n'est pas déjà membre
-        $user = User::findOrFail($validated['user_id']);
-        if ($server->isMember($user)) {
+        if ($server->members()->where('user_id', $validated['user_id'])->exists()) {
             return back()->with('error', 'Cet utilisateur est déjà membre du serveur.');
         }
 
