@@ -55,24 +55,40 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Marque une notification comme lue
-     *
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function markAsRead(Request $request, $id)
     {
-        $notification = UserRelation::findOrFail($id);
+        try {
+            $notification = UserRelation::findOrFail($id);
 
-        if ($notification->friend_id !== Auth::id()) {
-            return back()->with('error', 'Action non autorisée');
+            \Log::info('Tentative de marquer comme lu', [
+                'notification_id' => $id,
+                'user_id' => Auth::id(),
+                'friend_id' => $notification->friend_id
+            ]);
+
+            if ($notification->friend_id !== Auth::id()) {
+                \Log::warning('Tentative non autorisée de marquer une notification comme lue', [
+                    'notification_id' => $id,
+                    'user_id' => Auth::id()
+                ]);
+                return back()->with('error', 'Action non autorisée');
+            }
+
+            $notification->update(['read_at' => now()]);
+
+            \Log::info('Notification marquée comme lue avec succès', [
+                'notification_id' => $id
+            ]);
+
+            return back()->with('status', 'Notification marquée comme lue');
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors du marquage comme lu', [
+                'notification_id' => $id,
+                'error' => $e->getMessage()
+            ]);
+
+            return back()->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
-
-        $notification->update(['read_at' => now()]);
-
-        return back()->with('status', 'Notification marquée comme lue');
     }
 
     /**
@@ -82,11 +98,21 @@ class NotificationController extends Controller
      */
     public function markAllFollowersAsRead()
     {
+        // Utilisation de la requête directe pour s'assurer que la mise à jour est exécutée
         Auth::user()
             ->receivedRelations()
             ->where('status', 'accepted')
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
+
+        // Débug pour vérifier que des lignes ont été affectées
+        $affectedRows = Auth::user()
+            ->receivedRelations()
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->count();
+
+        \Log::info('Marquage de tous les followers comme lus', ['affected_rows' => $affectedRows]);
 
         return back()->with('status', 'Toutes les notifications ont été marquées comme lues');
     }

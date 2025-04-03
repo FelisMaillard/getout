@@ -16,12 +16,14 @@ class UserRelation extends Model
         'friend_id',
         'status',
         'privacy_consent',
-        'privacy_consent_date'
+        'privacy_consent_date',
+        'read_at'
     ];
 
     protected $casts = [
         'privacy_consent' => 'boolean',
         'privacy_consent_date' => 'datetime',
+        'read_at' => ''
     ];
 
     // Relation avec l'utilisateur qui envoie la demande

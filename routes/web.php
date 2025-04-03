@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routes des notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-    Route::post('/notifications/followers/read', [NotificationController::class, 'markAllFollowersAsRead'])->name('notifications.followers.read');
+    Route::post('/notifications/followers/read-all', [NotificationController::class, 'markAllFollowersAsRead'])->name('notifications.followers.read');
 
     // Profile public routes
     Route::get('/@{tag}', [ProfileController::class, 'show'])->name('profile.show');
