@@ -5,15 +5,17 @@
 @section('content')
 <div class="min-h-screen bg-black py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
+        <h1 class="text-2xl font-bold text-white mb-8">Notifications</h1>
+
         <!-- Tableau unifié des notifications -->
         <div class="bg-black overflow-hidden border border-gray-800 rounded-lg">
             <div class="p-4 border-b border-gray-800">
-                <h1 class="text-lg font-medium text-white flex items-center">
+                <h2 class="text-lg font-medium text-white flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                     </svg>
                     Notifications
-                </h1>
+                </h2>
             </div>
 
             @if($pendingRequests->isEmpty() && $serverInvites->isEmpty())
@@ -34,7 +36,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-800">
                             <!-- Demandes d'abonnement -->
-                            @foreach($pendingRequests as $request)
+                            @forelse($pendingRequests as $request)
                                 <tr class="hover:bg-gray-900 transition-colors duration-200">
                                     <td class="px-4 py-4 text-sm text-white">
                                         <span class="px-2 py-1 bg-purple-600 bg-opacity-20 text-purple-400 rounded-full">
@@ -75,10 +77,12 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <!-- On ne fait rien ici, car le message de vide s'affiche seulement si les deux collections sont vides -->
+                            @endforelse
 
                             <!-- Invitations aux serveurs -->
-                            @foreach($serverInvites as $invite)
+                            @forelse($serverInvites as $invite)
                                 <tr class="hover:bg-gray-900 transition-colors duration-200">
                                     <td class="px-4 py-4 text-sm text-white">
                                         <span class="px-2 py-1 bg-blue-600 bg-opacity-20 text-blue-400 rounded-full">
@@ -123,7 +127,9 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <!-- On ne fait rien ici, car le message de vide s'affiche seulement si les deux collections sont vides -->
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -131,13 +137,13 @@
                 <!-- Pagination -->
                 <div class="p-4 border-t border-gray-800 flex justify-between items-center">
                     <div class="text-sm text-gray-400">
-                        {{ $pendingRequests->total() + $serverInvites->total() }} notification(s) au total
+                        {{ ($pendingRequests->total() ?? 0) + ($serverInvites->total() ?? 0) }} notification(s) au total
                     </div>
                     <div class="flex space-x-4">
-                        @if($pendingRequests->hasPages())
+                        @if(isset($pendingRequests) && method_exists($pendingRequests, 'hasPages') && $pendingRequests->hasPages())
                             <div>{{ $pendingRequests->links() }}</div>
                         @endif
-                        @if($serverInvites->hasPages())
+                        @if(isset($serverInvites) && method_exists($serverInvites, 'hasPages') && $serverInvites->hasPages())
                             <div>{{ $serverInvites->links() }}</div>
                         @endif
                     </div>
