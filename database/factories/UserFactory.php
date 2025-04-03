@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'isAdmin' => false
         ];
     }
 
@@ -56,6 +57,7 @@ class UserFactory extends Factory
             'bio' => 'Administrateur de Getout',
             'email' => 'felis.maillard@gmail.com',
             'password' => Hash::make('*02FelisAdmin2025$'),
+            'isAdmin' => true
         ]);
     }
 
@@ -72,6 +74,7 @@ class UserFactory extends Factory
             'bio' => 'Administrateur de Getout',
             'email' => 'tusseauelouan@gmail.com',
             'password' => Hash::make('#20Admin@Elouan25$'),
+            'isAdmin' => true
         ]);
     }
 
@@ -89,6 +92,7 @@ class UserFactory extends Factory
             'private' => true,
             'email' => 'admin@getout.fr',
             'password' => Hash::make('*02FeNalAdmin#Getout@2025$'),
+            'isAdmin' => true
         ]);
     }
 }

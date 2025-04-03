@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('private')->default(false);
             $table->timestamp('last_tag_change')->nullable();
+            $table->boolean('isAdmin');
             $table->rememberToken();
             $table->timestamps();
         });
