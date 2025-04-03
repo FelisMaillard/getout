@@ -123,7 +123,7 @@
 
 <!-- Alerte de confirmation de signalement (en bas à droite) -->
 @if(session('report_success'))
-    <div id="report-success-alert" class="fixed bottom-20 right-8 max-w-sm bg-green-900/90 border border-green-800 text-green-400 px-4 py-3 rounded-lg shadow-lg z-50" role="alert">
+    <div id="report-success-alert" class="fixed bottom-20 right-4 max-w-sm bg-green-900/90 border border-green-800 text-green-400 px-4 py-3 rounded-lg shadow-lg z-50" role="alert">
         <div class="flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
