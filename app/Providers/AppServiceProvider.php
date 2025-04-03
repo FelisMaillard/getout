@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Access\Response;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,8 +27,15 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.app', function ($view) {
             $user = Auth::user();
             if ($user) {
+                // Récupérer les relations en attente ET les nouveaux followers non lus
                 $pendingRequests = $user->receivedRelations()
-                    ->where('status', 'pending')
+                    ->where(function($query) {
+                        $query->where('status', 'pending')
+                              ->orWhere(function($q) {
+                                  $q->where('status', 'accepted')
+                                    ->whereNull('read_at');
+                              });
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
 

@@ -159,8 +159,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                                     </svg>
                                     @if($pendingRequestsCount > 0)
-                                        <div class="absolute -top-2 -right-3 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
-                                            <span class="text-xs font-bold text-white">{{ $pendingRequestsCount }}</span>
+                                        <div class="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center z-50" style="box-shadow: 0 0 0 2px #000;">
+                                            <span class="text-xs font-bold">{{ $pendingRequestsCount }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -247,12 +247,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                         </svg>
                         @if($pendingRequestsCount > 0)
-                            <div class="absolute -top-2 -right-3 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
-                                <span class="text-xs font-bold text-white">{{ $pendingRequestsCount }}</span>
+                            <div class="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center z-50" style="box-shadow: 0 0 0 2px #000;">
+                                <span class="text-xs font-bold">{{ $pendingRequestsCount }}</span>
                             </div>
                         @endif
                     </div>
-                    <span class="ml-4 text-white w-0 group-hover/sidebar:w-auto overflow-hidden whitespace-nowrap transition-all duration-300">Notifications</span>
                 </a>
 
                 <a href="{{ route('profile.show', ['tag' => Auth::user()->tag]) }}" class="p-2 text-white hover:text-purple-500 transition-colors duration-200">
