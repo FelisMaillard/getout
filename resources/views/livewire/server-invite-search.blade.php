@@ -44,7 +44,7 @@
                             {{ $friendship->friend->prenom }} {{ $friendship->friend->nom }}
                         </p>
                         <p class="text-gray-400 text-sm">
-                            {{ "@" . $user->tag }}
+                           {{'@' . $friendship->friend->tag }}
                         </p>
                     </div>
                 </div>
