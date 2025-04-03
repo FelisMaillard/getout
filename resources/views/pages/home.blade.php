@@ -7,7 +7,7 @@
 @section('content')
 <div class="min-h-screen bg-black flex flex-col">
     <div class="flex-1 flex flex-col items-center justify-start pt-20 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-white mb-8">Version : 3.4.25 : 10:08</h1>
+        <h1 class="text-3xl font-bold text-white mb-8">Version : 3.4.25 : 11h30</h1>
 
         <div class="w-full max-w-3xl space-y-6">
             <!-- Mock post 1 -->
