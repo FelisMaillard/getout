@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRelation;
 use App\Models\ServerInvite;
-use Illuminate\Support\Collection;
 
 class NotificationController extends Controller
 {
@@ -18,15 +17,24 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        // Récupération des demandes d'abonnement
+        // Demandes d'abonnement existantes
         $pendingRequests = Auth::user()
             ->receivedRelations()
             ->with('user')
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
-        // Récupération des invitations aux serveurs
+        // Nouvelles relations (followers) - ajout de cette partie
+        $newFollowers = Auth::user()
+            ->receivedRelations()
+            ->with('user')
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Ajout des invitations aux serveurs
         $serverInvites = ServerInvite::where('invitee_id', Auth::id())
             ->whereNull('accepted_at')
             ->whereNull('rejected_at')
@@ -36,66 +44,76 @@ class NotificationController extends Controller
             })
             ->with(['server', 'inviter'])
             ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Fusion des notifications dans une seule collection
-        $allNotifications = new Collection();
-
-        // Ajouter les demandes d'abonnement
-        foreach ($pendingRequests as $request) {
-            $allNotifications->push([
-                'id' => 'friend_' . $request->id,
-                'type' => 'friend_request',
-                'data' => $request,
-                'created_at' => $request->created_at,
-                'sender' => $request->user,
-                'content' => 'souhaite vous suivre'
-            ]);
-        }
-
-        // Ajouter les invitations aux serveurs
-        foreach ($serverInvites as $invite) {
-            $allNotifications->push([
-                'id' => 'server_' . $invite->id,
-                'type' => 'server_invite',
-                'data' => $invite,
-                'created_at' => $invite->created_at,
-                'sender' => $invite->inviter,
-                'content' => 'vous invite à rejoindre ' . $invite->server->name
-            ]);
-        }
-
-        // Trier toutes les notifications par date (les plus récentes d'abord)
-        $sortedNotifications = $allNotifications->sortByDesc('created_at');
-
-        // Compter les notifications non lues
-        $notificationCount = $sortedNotifications->count();
+            ->paginate(10);
 
         return view('notifications.index', [
-            'notifications' => $sortedNotifications,
-            'notificationCount' => $notificationCount,
-            'pendingRequests' => $pendingRequests, // Gardons les données originales pour la rétrocompatibilité
-            'serverInvites' => $serverInvites // Gardons les données originales pour la rétrocompatibilité
+            'pendingRequests' => $pendingRequests,
+            'pendingRequestsCount' => $pendingRequests->total(),
+            'newFollowers' => $newFollowers,
+            'newFollowersCount' => $newFollowers->total(),
+            'serverInvites' => $serverInvites
         ]);
     }
 
-    /**
-     * Marque une notification comme lue
-     *
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function markAsRead(Request $request, $id)
     {
-        $notification = UserRelation::findOrFail($id);
+        try {
+            $notification = UserRelation::findOrFail($id);
 
-        if ($notification->friend_id !== Auth::id()) {
-            return back()->with('error', 'Action non autorisée');
+            \Log::info('Tentative de marquer comme lu', [
+                'notification_id' => $id,
+                'user_id' => Auth::id(),
+                'friend_id' => $notification->friend_id
+            ]);
+
+            if ($notification->friend_id !== Auth::id()) {
+                \Log::warning('Tentative non autorisée de marquer une notification comme lue', [
+                    'notification_id' => $id,
+                    'user_id' => Auth::id()
+                ]);
+                return back()->with('error', 'Action non autorisée');
+            }
+
+            $notification->update(['read_at' => now()]);
+
+            \Log::info('Notification marquée comme lue avec succès', [
+                'notification_id' => $id
+            ]);
+
+            return back()->with('status', 'Notification marquée comme lue');
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors du marquage comme lu', [
+                'notification_id' => $id,
+                'error' => $e->getMessage()
+            ]);
+
+            return back()->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
+    }
 
-        $notification->update(['read_at' => now()]);
+    /**
+     * Marque tous les nouveaux followers comme lus
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function markAllFollowersAsRead()
+    {
+        // Utilisation de la requête directe pour s'assurer que la mise à jour est exécutée
+        Auth::user()
+            ->receivedRelations()
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
 
-        return back()->with('status', 'Notification marquée comme lue');
+        // Débug pour vérifier que des lignes ont été affectées
+        $affectedRows = Auth::user()
+            ->receivedRelations()
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->count();
+
+        \Log::info('Marquage de tous les followers comme lus', ['affected_rows' => $affectedRows]);
+
+        return back()->with('status', 'Toutes les notifications ont été marquées comme lues');
     }
 }
