@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('reported_user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('type_report_id')->constrained('type_report_users');
             $table->text('description')->nullable();
-            $table->json('evidence')->nullable(); // URLs des preuves, captures d'écran, etc.
             $table->enum('status', ['pending', 'investigating', 'resolved', 'rejected'])->default('pending');
             $table->text('resolution_note')->nullable();
             $table->foreignId('resolved_by')->nullable()->constrained('users');
