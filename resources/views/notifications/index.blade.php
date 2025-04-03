@@ -78,7 +78,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <!-- On ne fait rien ici, car le message de vide s'affiche seulement si les deux collections sont vides -->
+                                <!-- Pas de demandes d'abonnement -->
                             @endforelse
 
                             <!-- Invitations aux serveurs -->
@@ -128,7 +128,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <!-- On ne fait rien ici, car le message de vide s'affiche seulement si les deux collections sont vides -->
+                                <!-- Pas d'invitations aux serveurs -->
                             @endforelse
                         </tbody>
                     </table>
@@ -140,10 +140,10 @@
                         {{ ($pendingRequests->total() ?? 0) + ($serverInvites->total() ?? 0) }} notification(s) au total
                     </div>
                     <div class="flex space-x-4">
-                        @if(isset($pendingRequests) && method_exists($pendingRequests, 'hasPages') && $pendingRequests->hasPages())
+                        @if($pendingRequests->hasPages())
                             <div>{{ $pendingRequests->links() }}</div>
                         @endif
-                        @if(isset($serverInvites) && method_exists($serverInvites, 'hasPages') && $serverInvites->hasPages())
+                        @if($serverInvites->hasPages())
                             <div>{{ $serverInvites->links() }}</div>
                         @endif
                     </div>
@@ -151,10 +151,5 @@
             @endif
         </div>
     </div>
-</div>
-<!-- Juste au début de la vue, après le titre -->
-<div class="bg-red-800 p-4 mb-4 rounded-lg">
-    <p class="text-white">Debug - Nombre de demandes : {{ $pendingRequests->count() }}</p>
-    <p class="text-white">Debug - Nombre d'invitations : {{ $serverInvites->count() }}</p>
 </div>
 @endsection
