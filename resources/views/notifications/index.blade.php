@@ -152,4 +152,9 @@
         </div>
     </div>
 </div>
+<!-- Juste au début de la vue, après le titre -->
+<div class="bg-red-800 p-4 mb-4 rounded-lg">
+    <p class="text-white">Debug - Nombre de demandes : {{ $pendingRequests->count() }}</p>
+    <p class="text-white">Debug - Nombre d'invitations : {{ $serverInvites->count() }}</p>
+</div>
 @endsection
