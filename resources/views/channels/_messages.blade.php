@@ -136,12 +136,6 @@
                     class="w-full px-4 py-2 max-h-32 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent resize-none overflow-auto"
                     placeholder="Envoyer un message..."
                     autocomplete="off"></textarea>
-
-                <div id="emoji-button" class="absolute right-2 bottom-2 text-gray-400 hover:text-white cursor-pointer p-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
             </div>
 
             {{-- Send button --}}
