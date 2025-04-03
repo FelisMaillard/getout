@@ -25,6 +25,15 @@ class NotificationController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        // Nouvelles relations (followers) - ajout de cette partie
+        $newFollowers = Auth::user()
+            ->receivedRelations()
+            ->with('user')
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         // Ajout des invitations aux serveurs
         $serverInvites = ServerInvite::where('invitee_id', Auth::id())
             ->whereNull('accepted_at')
@@ -40,6 +49,8 @@ class NotificationController extends Controller
         return view('notifications.index', [
             'pendingRequests' => $pendingRequests,
             'pendingRequestsCount' => $pendingRequests->total(),
+            'newFollowers' => $newFollowers,
+            'newFollowersCount' => $newFollowers->total(),
             'serverInvites' => $serverInvites
         ]);
     }
@@ -62,5 +73,21 @@ class NotificationController extends Controller
         $notification->update(['read_at' => now()]);
 
         return back()->with('status', 'Notification marquée comme lue');
+    }
+
+    /**
+     * Marque tous les nouveaux followers comme lus
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function markAllFollowersAsRead()
+    {
+        Auth::user()
+            ->receivedRelations()
+            ->where('status', 'accepted')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return back()->with('status', 'Toutes les notifications ont été marquées comme lues');
     }
 }

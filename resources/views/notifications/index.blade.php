@@ -7,6 +7,84 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <h1 class="text-2xl font-bold text-white mb-8">Notifications</h1>
 
+        <!-- Section des nouveaux followers -->
+        <div class="bg-black overflow-hidden mt-8">
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="text-lg font-medium text-white">Nouveaux abonnés</h2>
+                @if($newFollowers->isNotEmpty())
+                    <form action="{{ route('notifications.followers.read') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="text-sm text-purple-400 hover:text-purple-300">
+                            Tout marquer comme lu
+                        </button>
+                    </form>
+                @endif
+            </div>
+
+            @if($newFollowers->isEmpty())
+                <div class="p-4 text-gray-400 text-center">
+                    Aucun nouvel abonné
+                </div>
+            @else
+                <div class="divide-y divide-gray-800">
+                    @foreach($newFollowers as $follower)
+                        <div class="p-4 hover:bg-gray-900 transition-colors duration-200">
+                            <div class="flex items-center justify-between">
+                                <!-- Info utilisateur -->
+                                <div class="flex items-center space-x-4">
+                                    <a href="{{ route('profile.show', $follower->user->tag) }}"
+                                    class="flex items-center space-x-4 group">
+                                        <!-- Avatar -->
+                                        @if($follower->user->profile_photo_url)
+                                            <img src="{{ Storage::url($follower->user->profile_photo_url) }}"
+                                                alt="{{ $follower->user->prenom }}"
+                                                class="w-12 h-12 rounded-full object-cover">
+                                        @else
+                                            <div class="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
+                                                {{ substr($follower->user->prenom, 0, 1) . substr($follower->user->nom, 0, 1) }}
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <p class="text-white font-medium group-hover:text-purple-400 transition">
+                                                {{ $follower->user->prenom }} {{ $follower->user->nom }}
+                                            </p>
+                                            <p class="text-gray-400 text-sm">{{ '@' . $follower->user->tag }}</p>
+                                            <p class="text-gray-500 text-xs mt-1">
+                                                {{ $follower->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex items-center space-x-2">
+                                    <form action="{{ route('notifications.markAsRead', $follower->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                            Marquer comme lu
+                                        </button>
+                                    </form>
+
+                                    <a href="{{ route('profile.show', $follower->user->tag) }}"
+                                    class="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                                        Voir le profil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination -->
+                @if($newFollowers->hasPages())
+                    <div class="p-4 border-t border-gray-800">
+                        {{ $newFollowers->links() }}
+                    </div>
+                @endif
+            @endif
+        </div>
+
         <!-- Sections des demandes d'abonnement -->
         <div class="bg-black overflow-hidden">
             <div class="p-4 border-b border-gray-800">
