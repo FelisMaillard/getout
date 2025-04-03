@@ -39,15 +39,6 @@
                 @endif
 
                 @if($newFollowers->isNotEmpty())
-                    <form action="{{ route('notifications.followers.read') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="text-sm text-purple-400 hover:text-purple-300">
-                            Tout marquer comme lu
-                        </button>
-                    </form>
-                @endif
-
-                @if($newFollowers->isNotEmpty())
                     <div class="divide-y divide-gray-800">
                         @foreach($newFollowers as $follower)
                             <div class="p-4 hover:bg-gray-900 transition-colors duration-200">
