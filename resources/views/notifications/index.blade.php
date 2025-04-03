@@ -78,11 +78,6 @@
                                                 Marquer comme lu
                                             </button>
                                         </form>
-
-                                        <a href="{{ route('profile.show', $follower->user->tag) }}"
-                                        class="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors duration-200">
-                                            Voir le profil
-                                        </a>
                                     </div>
                                 </div>
                             </div>
