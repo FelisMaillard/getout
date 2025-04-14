@@ -39,12 +39,26 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('created_at', 'desc')
                     ->get();
 
+                // Récupérer les invitations aux serveurs
+                $serverInvites = ServerInvite::where('invitee_id', $user->id)
+                    ->whereNull('accepted_at')
+                    ->whereNull('rejected_at')
+                    ->where(function ($query) {
+                        $query->whereNull('expires_at')
+                              ->orWhere('expires_at', '>', now());
+                    })
+                    ->with(['server', 'inviter'])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                $serverInvitesCount = $serverInvites->count();
+
                 $pendingRequestsCount = $pendingRequests->count();
 
                 $view->with([
                     'user' => $user,
                     'pendingRequests' => $pendingRequests,
-                    'pendingRequestsCount' => $pendingRequestsCount
+                    'pendingRequestsCount' => $pendingRequestsCount + $serverInvitesCount
                 ]);
             }
         });

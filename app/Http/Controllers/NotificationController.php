@@ -51,7 +51,8 @@ class NotificationController extends Controller
             'pendingRequestsCount' => $pendingRequests->total(),
             'newFollowers' => $newFollowers,
             'newFollowersCount' => $newFollowers->total(),
-            'serverInvites' => $serverInvites
+            'serverInvites' => $serverInvites,
+            'serverInvitesCount' => $serverInvites->total()
         ]);
     }
 

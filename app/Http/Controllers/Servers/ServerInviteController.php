@@ -66,7 +66,7 @@ class ServerInviteController extends Controller
         $invite = $server->invites()->create([
             'inviter_id' => Auth::id(),
             'invitee_id' => $validated['invitee_id'],
-            'expires_at' => now()->addDays(30), // Expire après 30 jours
+            'expires_at' => now()->addDays(7), // Expire après 30 jours
         ]);
 
         return back()->with('success', 'Invitation envoyée avec succès.');
@@ -104,7 +104,7 @@ class ServerInviteController extends Controller
     /**
      * Refuse une invitation
      */
-    public function reject(ServerInvite $invite)
+    public function reject($invite)
     {
         if (Auth::id() !== $invite->invitee_id) {
             return back()->with('error', 'Cette invitation ne vous est pas destinée.');
