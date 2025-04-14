@@ -104,7 +104,7 @@ class ServerInviteController extends Controller
     /**
      * Refuse une invitation
      */
-    public function reject($invite)
+    public function reject(Server $server, ServerInvite $invite)
     {
         if (Auth::id() !== $invite->invitee_id) {
             return back()->with('error', 'Cette invitation ne vous est pas destinée.');
@@ -117,7 +117,7 @@ class ServerInviteController extends Controller
         $invite->reject();
 
         return back()->with('success', 'Invitation refusée.');
-    }
+}
 
     /**
      * Annule une invitation (pour l'inviteur)

@@ -85,8 +85,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('invites')->name('invites.')->group(function () {
                 Route::post('/', [ServerInviteController::class, 'store'])->name('store');
                 Route::post('{invite}/accept', [ServerInviteController::class, 'accept'])->name('accept');
-                Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])->name('reject');
                 Route::delete('{invite}', [ServerInviteController::class, 'cancel'])->name('cancel');
+                Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])
+                ->name('reject')
+                ->whereNumber('invite');
             });
 
 
