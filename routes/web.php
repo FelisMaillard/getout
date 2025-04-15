@@ -34,8 +34,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/settings/profile', [SettingsProfileController::class, 'update'])->name('profile.update');
     Route::delete('/settings/profile', [SettingsProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::put('/profile/photo', [ProfilePhotoController::class, 'update'])->name('profile.photo.update');
-    Route::delete('/profile/photo', [ProfilePhotoController::class, 'destroy'])->name('profile.photo.delete');
+    // Nouvelle route pour la confirmation de suppression
+    Route::get('/settings/profile/confirm-delete', function () {
+        return view('profile.confirm-delete');
+    })->name('profile.confirm-delete');
+
+    // Route::put('/profile/photo', [ProfilePhotoController::class, 'update'])->name('profile.photo.update');
+    // Route::delete('/profile/photo', [ProfilePhotoController::class, 'destroy'])->name('profile.photo.delete');
 
     // Routes pour les amitiés
     Route::post('/relations/{userTag}', [UserRelationController::class, 'sendRequest'])->name('relations.send');
