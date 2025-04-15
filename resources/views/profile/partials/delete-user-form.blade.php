@@ -1,4 +1,4 @@
-<section>
+<section class="mb-24">
     <header>
         <h2 class="text-xl font-bold text-white">
             {{ __('Supprimer le compte') }}
@@ -14,7 +14,7 @@
         </x-danger-button>
     </div>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+    <x-modal name="confirm-user-deletion" :show="$errors->deleteUser->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
@@ -30,7 +30,7 @@
             <div class="mt-6">
                 <x-input-label for="password" value="{{ __('Mot de passe') }}" class="sr-only" />
                 <x-text-input id="password" name="password" type="password" class="mt-1" placeholder="{{ __('Mot de passe') }}" />
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-input-error :messages="$errors->deleteUser->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end gap-4">

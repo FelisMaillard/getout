@@ -8,9 +8,9 @@
         </p>
     </header>
 
-    <!-- Photo de profil -->
+    <!-- Photo de profil (en pause)-->
     <div class="mb-6 border-b border-gray-800 pb-6">
-        <h3 class="text-lg font-medium text-white mb-4">Photo de profil</h3>
+        {{-- <h3 class="text-lg font-medium text-white mb-4">Photo de profil</h3>
 
         <!-- Affichage de la photo actuelle et input sur la même ligne -->
         <div class="flex items-start gap-4">
@@ -63,7 +63,7 @@
                 </button>
                 <x-input-error class="mt-2" :messages="$errors->get('photo')" />
             </form>
-        </div>
+        </div> --}}
     </div>
 
 

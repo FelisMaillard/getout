@@ -58,8 +58,8 @@
                                                 </div>
                                             @endif
                                             <div>
-                                                <p class="text-white font-medium group-hover:text-purple-400 transition">
-                                                    {{ $follower->user->prenom }} {{ $follower->user->nom }}
+                                                <p class="text-white font-small md:font-medium group-hover:text-purple-400 transition">
+                                                    {{ $follower->user->prenom }} {{ $follower->user->nom }} s'est abonné !
                                                 </p>
                                                 <p class="text-gray-400 text-sm">{{ '@' . $follower->user->tag }}</p>
                                                 <p class="text-gray-500 text-xs mt-1">
@@ -71,13 +71,13 @@
 
                                     <!-- Actions -->
                                     <div class="flex items-center space-x-2">
-                                        <form action="{{ route('notifications.markAsRead', $follower->id) }}" method="POST" class="inline">
+                                        <a href="{{ "@" . $follower->user->tag }}" class="inline">
                                             @csrf
-                                            <button type="submit"
+                                            <p type="submit"
                                                     class="px-4 py-2 bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                                                Marquer comme lu
-                                            </button>
-                                        </form>
+                                                Voir profil
+                                            </p>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

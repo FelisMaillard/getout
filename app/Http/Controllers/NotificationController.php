@@ -56,6 +56,13 @@ class NotificationController extends Controller
         ]);
     }
 
+    /**
+     * Marque une notification comme lue
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function markAsRead(Request $request, $id)
     {
         try {
