@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias(['ban' => \App\Http\Middleware\CheckUserBan::class]);
+        // Enregistrer l'alias
+        $middleware->alias([
+            'ban' => \App\Http\Middleware\CheckUserBan::class
+        ]);
+
+        // Ajouter le middleware globalement à toutes les requêtes
+        $middleware->append(\App\Http\Middleware\CheckUserBan::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

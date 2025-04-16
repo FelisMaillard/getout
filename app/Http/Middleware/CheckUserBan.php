@@ -6,49 +6,53 @@ use App\Models\SanctionUser;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class CheckUserBan
 {
-    /**
-     * Vérifie si l'utilisateur est banni avant de traiter la requête.
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        // Si l'utilisateur n'est pas connecté, continuer normalement
+        Log::info('CheckUserBan middleware is running', [
+            'user_id' => Auth::id(),
+            'path' => $request->path()
+        ]);
+
         if (!Auth::check()) {
             return $next($request);
         }
 
         $user = Auth::user();
 
-        // Rechercher une sanction active pour l'utilisateur
+        // Requête simplifiée - juste chercher une sanction active pour cet utilisateur
         $activeSanction = SanctionUser::where('user_id', $user->id)
             ->where('status', 'active')
-            ->where(function ($query) {
-                $now = now();
-                $query->where('is_permanent', true)
-                    ->orWhere(function ($q) use ($now) {
-                        $q->where('start_at', '<=', $now)
-                          ->where(function ($inner) use ($now) {
-                              $inner->whereNull('end_at')
-                                    ->orWhere('end_at', '>=', $now);
-                          });
-                    });
-            })
-            ->with('typeReport')
             ->first();
 
-        // Si une sanction active est trouvée, rediriger vers la page de bannissement
-        if ($activeSanction) {
-            // Stocker les infos de sanction dans la session
-            session(['user_sanction' => $activeSanction]);
+        Log::info('Recherche de sanctions', [
+            'user_id' => $user->id,
+            'found' => $activeSanction ? 'oui' : 'non',
+            'sanction_id' => $activeSanction ? $activeSanction->id : null
+        ]);
 
-            // Rediriger vers la page de bannissement
-            return redirect()->route('banned');
+        if ($activeSanction) {
+            // Simple vérification si la sanction est active (permanent ou dans les dates)
+            $isActive = $activeSanction->is_permanent ||
+                        ($activeSanction->start_at <= now() &&
+                         ($activeSanction->end_at === null || $activeSanction->end_at >= now()));
+
+            Log::info('Vérification si sanction active', [
+                'is_active' => $isActive,
+                'is_permanent' => $activeSanction->is_permanent,
+                'start_at' => $activeSanction->start_at,
+                'end_at' => $activeSanction->end_at
+            ]);
+
+            if ($isActive) {
+                session(['user_sanction' => $activeSanction]);
+                return redirect()->route('banned');
+            }
         }
 
-        // Si aucune sanction active, continuer normalement
         return $next($request);
     }
 }

@@ -3,7 +3,7 @@
 @section('title', 'Compte suspendu')
 
 @section('content')
-<div class="min-h-screen bg-black py-12">
+<div class="bg-black py-12">
     <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-0">
         <div class="bg-black rounded-lg border border-red-800 p-6">
             <div class="text-center mb-8">

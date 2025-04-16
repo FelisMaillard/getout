@@ -22,7 +22,7 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified','ban'])->group(function () {
     // Home route
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
