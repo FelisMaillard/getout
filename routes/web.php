@@ -115,4 +115,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
+// Route pour afficher la page de bannissement
+Route::get('/banned', function () {
+    // Si aucune sanction en session, rediriger vers l'accueil
+    if (!session()->has('user_sanction')) {
+        return redirect()->route('home');
+    }
+
+    return view('banned');
+})->name('banned');
+
 require __DIR__.'/auth.php';
