@@ -7,10 +7,10 @@
         {{-- Avatar --}}
         <div class="flex-shrink-0 {{ $message->user_id === auth()->id() ? 'ml-3' : 'mr-3' }}">
             <a href="{{ route('profile.show', $message->user->tag) }}" class="block">
-                @if($message->user->profile_photo_url)
+                @if ($message->user->profile_photo_url)
                     <img src="{{ Storage::url($message->user->profile_photo_url) }}"
-                         alt="{{ $message->user->prenom }} {{ $message->user->nom }}"
-                         class="w-10 h-10 rounded-full object-cover shadow-md border border-gray-800">
+                        alt="{{ $message->user->prenom }} {{ $message->user->nom }}"
+                        class="w-10 h-10 rounded-full object-cover shadow-md border border-gray-800">
                 @else
                     <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center shadow-md">
                         <span class="text-white text-sm font-medium">
@@ -24,16 +24,18 @@
         {{-- Message Bubble --}}
         <div class="flex flex-col {{ $message->user_id === auth()->id() ? 'items-end' : '' }}">
             {{-- Username and Timestamp --}}
-            <div class="flex items-center mb-1 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
+            <div
+                class="flex items-center mb-1 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
                 <a href="{{ route('profile.show', $message->user->tag) }}"
-                   class="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors">
+                    class="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors">
                     {{ $message->user->prenom }} {{ $message->user->nom }}
                 </a>
                 <span class="text-xs text-gray-500 mx-2">•</span>
-                <time datetime="{{ $message->created_at->toIso8601String() }}" class="text-xs text-gray-500" title="{{ $message->created_at->format('d/m/Y H:i') }}">
+                <time datetime="{{ $message->created_at->toIso8601String() }}" class="text-xs text-gray-500"
+                    title="{{ $message->created_at->format('d/m/Y H:i') }}">
                     {{ $message->created_at->diffForHumans(['short' => true]) }}
                 </time>
-                @if($message->edited_at)
+                @if ($message->edited_at)
                     <span class="text-xs text-gray-500 ml-2">(modifié)</span>
                 @endif
             </div>
@@ -41,21 +43,19 @@
             {{-- Message Content --}}
             <div class="flex items-start group w-full">
                 {{-- Message Body --}}
-                <div class="text-gray-100 bg-gray-800/40 rounded-lg px-4 py-2 max-w-full break-words
+                <div
+                    class="text-gray-100 bg-gray-800/40 rounded-lg px-4 py-2 max-w-full break-words
                            {{ $message->user_id === auth()->id() ? 'bg-purple-900/40' : '' }}">
 
-                    @if($message->type === 'text')
+                    @if ($message->type === 'text')
                         <p class="whitespace-pre-wrap text-md">{{ $message->content }}</p>
                     @elseif($message->type === 'file')
-                        @if($message->file_type === 'image')
+                        @if ($message->file_type === 'image')
                             <div class="relative group/image">
-                                <img src="{{ Storage::url($message->file_path) }}"
-                                     alt="{{ $message->file_name }}"
-                                     class="max-w-lg rounded-lg max-h-96 object-contain"
-                                     loading="lazy">
-                                <a href="{{ Storage::url($message->file_path) }}"
-                                   target="_blank"
-                                   class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 rounded-lg">
+                                <img src="{{ Storage::url($message->file_path) }}" alt="{{ $message->file_name }}"
+                                    class="max-w-lg rounded-lg max-h-96 object-contain" loading="lazy">
+                                <a href="{{ Storage::url($message->file_path) }}" target="_blank"
+                                    class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 rounded-lg">
                                     <span class="text-white bg-black bg-opacity-75 px-4 py-2 rounded-lg">
                                         Voir l'original
                                     </span>
@@ -63,23 +63,30 @@
                             </div>
                         @elseif($message->file_type === 'video')
                             <video controls class="max-w-lg rounded-lg">
-                                <source src="{{ Storage::url($message->file_path) }}" type="{{ $message->mime_type }}">
+                                <source src="{{ Storage::url($message->file_path) }}"
+                                    type="{{ $message->mime_type }}">
                                 Votre navigateur ne supporte pas la lecture de vidéos.
                             </video>
                         @else
                             <div class="flex items-center space-x-3 bg-gray-800/70 p-3 rounded-lg">
                                 <div class="text-white">
-                                    @if(Str::endsWith($message->file_name, ['.pdf']))
+                                    @if (Str::endsWith($message->file_name, ['.pdf']))
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                            </path>
                                         </svg>
                                     @elseif(Str::endsWith($message->file_name, ['.xlsx', '.xls']))
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
                                         </svg>
                                     @else
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                            </path>
                                         </svg>
                                     @endif
                                 </div>
@@ -87,11 +94,11 @@
                                     <p class="text-white text-sm font-medium truncate">{{ $message->file_name }}</p>
                                     <p class="text-xs text-gray-300">{{ human_filesize($message->file_size) }}</p>
                                 </div>
-                                <a href="{{ Storage::url($message->file_path) }}"
-                                   download="{{ $message->file_name }}"
-                                   class="text-white hover:text-purple-300 transition-colors duration-200 bg-gray-700 hover:bg-gray-600 rounded-full p-2">
+                                <a href="{{ Storage::url($message->file_path) }}" download="{{ $message->file_name }}"
+                                    class="text-white hover:text-purple-300 transition-colors duration-200 bg-gray-700 hover:bg-gray-600 rounded-full p-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                     </svg>
                                 </a>
                             </div>
@@ -100,30 +107,20 @@
                 </div>
 
                 {{-- Message Actions --}}
-                <div class="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200
+                <div
+                    class="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200
                     {{ $message->user_id === auth()->id() ? 'order-first mr-2' : 'ml-2' }}">
-                    @if($message->type === 'text' && $message->user_id === auth()->id())
-                        <button onclick="editMessage('{{ $message->id }}', {{ json_encode($message->content) }})"
-                                class="p-1.5 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                    @endif
-
-                    @if($message->user_id === auth()->id() || auth()->user()->can('moderate', $channel))
+                    @if ($message->user_id === auth()->id() || auth()->user()->can('moderate', $channel))
                         <form action="{{ route('servers.channels.messages.delete', [$server, $channel, $message]) }}"
-                              method="POST"
-                              class="inline"
-                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');">
+                            method="POST" class="inline"
+                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                    class="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-gray-700">
+                                class="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-gray-700">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
                             </button>
                         </form>

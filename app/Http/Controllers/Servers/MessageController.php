@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
@@ -124,8 +125,10 @@ class MessageController extends Controller
 
     protected function getFileType($mimeType)
     {
-        if (Str::startsWith($mimeType, 'image/')) return 'image';
-        if (Str::startsWith($mimeType, 'video/')) return 'video';
+        if (Str::startsWith($mimeType, 'image/'))
+            return 'image';
+        if (Str::startsWith($mimeType, 'video/'))
+            return 'video';
         return 'document';
     }
 
@@ -153,5 +156,30 @@ class MessageController extends Controller
         }
 
         return $metadata;
+    }
+
+    public function destroy(Server $server, Channel $channel, Message $message)
+    {
+        // Vérifier si l'utilisateur peut supprimer ce message
+        Gate::authorize('delete-message', $message);
+
+        try {
+            // Si c'est un fichier, on doit aussi supprimer le fichier
+            if ($message->type === 'file' && $message->file_path) {
+                Storage::disk('public')->delete($message->file_path);
+            }
+
+            $message->delete();
+
+            return redirect()->back()->with('success', 'Message supprimé avec succès');
+        } catch (\Exception $e) {
+            Log::error('Erreur suppression message', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+                'message_id' => $message->id
+            ]);
+
+            return redirect()->back()->with('error', 'Erreur lors de la suppression du message');
+        }
     }
 }

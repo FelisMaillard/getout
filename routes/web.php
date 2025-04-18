@@ -22,7 +22,7 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::middleware(['auth', 'verified','ban'])->group(function () {
+Route::middleware(['auth', 'verified', 'ban'])->group(function () {
     // Home route
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -92,8 +92,8 @@ Route::middleware(['auth', 'verified','ban'])->group(function () {
                 Route::post('{invite}/accept', [ServerInviteController::class, 'accept'])->name('accept');
                 Route::delete('{invite}', [ServerInviteController::class, 'cancel'])->name('cancel');
                 Route::post('{invite}/reject', [ServerInviteController::class, 'reject'])
-                ->name('reject')
-                ->whereNumber('invite');
+                    ->name('reject')
+                    ->whereNumber('invite');
             });
 
 
@@ -107,6 +107,7 @@ Route::middleware(['auth', 'verified','ban'])->group(function () {
                 // Messages
                 Route::prefix('{channel}/messages')->name('messages.')->group(function () {
                     Route::post('/', [MessageController::class, 'store'])->name('store');
+                    Route::get('/{message}/edit', [MessageController::class, 'edit'])->name('edit'); // Ajoutez cette ligne
                     Route::put('/{message}', [MessageController::class, 'update'])->name('update');
                     Route::delete('/{message}', [MessageController::class, 'destroy'])->name('delete');
                 });
@@ -125,4 +126,4 @@ Route::get('/banned', function () {
     return view('banned');
 })->name('banned');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
